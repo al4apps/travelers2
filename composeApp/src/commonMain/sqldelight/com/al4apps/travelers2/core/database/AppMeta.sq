@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS app_meta (
+    key TEXT NOT NULL PRIMARY KEY,
+    value TEXT
+);
+
+selectMetaByKey:
+SELECT *
+FROM app_meta
+WHERE key = ?;
+
+insertOrReplaceMeta:
+INSERT OR REPLACE INTO app_meta(key, value)
+VALUES (?, ?);
