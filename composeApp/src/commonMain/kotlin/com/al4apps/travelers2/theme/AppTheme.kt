@@ -1,11 +1,8 @@
-package ru.intabia.platform.theme
+package com.al4apps.travelers2.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
-import ru.expasoft.digitalpictureframe.theme.LAppColors
-import ru.expasoft.digitalpictureframe.theme.LocalDPFColors
-import ru.expasoft.digitalpictureframe.theme.lAppColors
 
 object AppTheme {
 

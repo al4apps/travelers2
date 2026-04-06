@@ -22,13 +22,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import intabiaplatform.composeapp.generated.resources.Res
-import intabiaplatform.composeapp.generated.resources.ic_image_not_found
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import ru.intabia.platform.shared_model.ChatAvatarUiState
-import ru.intabia.platform.shared_model.ChatListItemUiState
-import ru.intabia.platform.theme.AppTheme
+import travelers2.composeapp.generated.resources.Res
+import travelers2.composeapp.generated.resources.profile
+import com.al4apps.travelers2.shared_model.ChatAvatarUiState
+import com.al4apps.travelers2.shared_model.ChatListItemUiState
+import com.al4apps.travelers2.shared_model.ChatType
+import com.al4apps.travelers2.theme.AppTheme
 
 private val ChatListItemHeight = 72.dp
 private val ChatAvatarSize = 48.dp
@@ -124,7 +125,7 @@ private fun ChatAvatar(
 
             else -> {
                 androidx.compose.material3.Icon(
-                    painter = painterResource(Res.drawable.ic_image_not_found),
+                    painter = painterResource(Res.drawable.profile),
                     contentDescription = null,
                     tint = AppTheme.colors.icon.grayDark,
                     modifier = Modifier.size(22.dp)
@@ -149,7 +150,7 @@ fun ChatListItemPreview() {
         ChatListItem(
             state = ChatListItemUiState(
                 title = "[Intabia-Expasoft] МП",
-                type = ru.intabia.platform.shared_model.ChatType.CHANNEL,
+                type = ChatType.CHANNEL,
                 lastMessage = "Привет! Сегодня проводим встречу?"
             )
         )

@@ -23,9 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import ru.intabia.platform.shared_model.DockItem
-import ru.intabia.platform.shared_model.DockItemUiState
-import ru.intabia.platform.theme.AppTheme
+import com.al4apps.travelers2.shared_model.DockItem
+import com.al4apps.travelers2.shared_model.DockItemUiState
+import com.al4apps.travelers2.theme.AppTheme
 
 @Composable
 fun DockBar(

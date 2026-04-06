@@ -1,4 +1,4 @@
-package ru.intabia.platform.theme
+package com.al4apps.travelers2.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -8,20 +8,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import intabiaplatform.composeapp.generated.resources.Res
-import intabiaplatform.composeapp.generated.resources.roboto_bold
-import intabiaplatform.composeapp.generated.resources.roboto_medium
-import intabiaplatform.composeapp.generated.resources.roboto_regular
-import intabiaplatform.composeapp.generated.resources.roboto_semibold
-import org.jetbrains.compose.resources.Font
 
 @Composable
-private fun fontsFamily() = FontFamily(
-    Font(Res.font.roboto_regular, FontWeight.W400),
-    Font(Res.font.roboto_medium, FontWeight.W500),
-    Font(Res.font.roboto_semibold, FontWeight.W600),
-    Font(Res.font.roboto_bold, FontWeight.W700),
-)
+private fun fontsFamily(): FontFamily = FontFamily.SansSerif
 
 @Immutable
 data class AppTypography(

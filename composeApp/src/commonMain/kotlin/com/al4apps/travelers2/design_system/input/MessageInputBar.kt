@@ -22,10 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.al4apps.travelers2.core.ui.asString
 import org.jetbrains.compose.resources.vectorResource
-import ru.intabia.platform.shared_model.MessageInputActionType
-import ru.intabia.platform.shared_model.MessageInputBarUiState
-import ru.intabia.platform.theme.AppTheme
+import com.al4apps.travelers2.shared_model.MessageInputActionType
+import com.al4apps.travelers2.shared_model.MessageInputBarUiState
+import com.al4apps.travelers2.theme.AppTheme
 
 private val MessageInputMinHeight = 56.dp
 private val MessageInputMaxHeight = 156.dp
@@ -75,7 +76,7 @@ fun MessageInputBar(
             ) {
                 if (state.text.isBlank()) {
                     Text(
-                        text = state.placeholder.getString(),
+                        text = state.placeholder.asString(),
                         style = AppTheme.typography.body1,
                         color = AppTheme.colors.text.tertiary
                     )

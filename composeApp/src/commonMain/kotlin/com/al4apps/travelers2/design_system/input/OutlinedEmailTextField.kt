@@ -8,15 +8,16 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import intabiaplatform.composeapp.generated.resources.Res
-import intabiaplatform.composeapp.generated.resources.auth_email_label
+import com.al4apps.travelers2.core.ui.UiText
+import com.al4apps.travelers2.core.ui.asString
 import org.jetbrains.compose.resources.stringResource
-import ru.intabia.platform.shared_model.UiText
-import ru.intabia.platform.theme.AppTheme
-import androidx.compose.foundation.shape.RoundedCornerShape
+import travelers2.composeapp.generated.resources.Res
+import travelers2.composeapp.generated.resources.auth_email_label
+import com.al4apps.travelers2.theme.AppTheme
 
 @Composable
 fun OutlinedEmailTextField(
@@ -50,7 +51,7 @@ fun OutlinedEmailTextField(
     if (isError && errorText != null) {
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = errorText.getString(),
+            text = errorText.asString(),
             style = AppTheme.typography.caption,
             color = AppTheme.colors.icon.error,
             modifier = Modifier.fillMaxWidth()

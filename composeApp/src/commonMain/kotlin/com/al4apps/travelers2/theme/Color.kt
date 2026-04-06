@@ -1,4 +1,4 @@
-package ru.expasoft.digitalpictureframe.theme
+package com.al4apps.travelers2.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -21,7 +21,7 @@ val Success = Color(0xFF30B11C)
 val Error = Color(0xFFF85B43)
 val BlackLight = Color(0xB3363636)
 val Gray64 = Color(0xA3413F3F)
-val warning = Color(0xFFFF7768)
+val Warning = Color(0xFFFF7768)
 
 @Immutable
 data class LAppColors(
@@ -97,7 +97,7 @@ val lAppColors = LAppColors(
         folder = Folder,
         blackLight = BlackLight,
         gray64 = Gray64,
-        warning = warning
+        warning = Warning
     ),
     button = LAppColors.ButtonColors(
         primary = Beige,

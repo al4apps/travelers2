@@ -12,7 +12,7 @@ import androidx.compose.material3.TextButton as MaterialTextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.intabia.platform.theme.AppTheme
+import com.al4apps.travelers2.theme.AppTheme
 
 object LAppButtonStyles {
     val shape = RoundedCornerShape(14.dp)

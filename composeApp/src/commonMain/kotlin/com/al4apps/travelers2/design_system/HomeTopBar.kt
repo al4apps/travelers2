@@ -18,16 +18,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import intabiaplatform.composeapp.generated.resources.Res
-import intabiaplatform.composeapp.generated.resources.ic_arrow_back
-import intabiaplatform.composeapp.generated.resources.ic_settings
-import intabiaplatform.composeapp.generated.resources.ic_visibility_active
+import com.al4apps.travelers2.core.ui.UiText
+import com.al4apps.travelers2.core.ui.asString
+import com.al4apps.travelers2.shared_model.HomeTopBarUiState
+import com.al4apps.travelers2.theme.AppTheme
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.vectorResource
-import ru.intabia.platform.shared_model.HomeTopBarUiState
-import ru.intabia.platform.shared_model.getString
-import ru.intabia.platform.shared_model.UiText
-import ru.intabia.platform.theme.AppTheme
+import travelers2.composeapp.generated.resources.Res
+import travelers2.composeapp.generated.resources.arrow_left
+import travelers2.composeapp.generated.resources.exit
+import travelers2.composeapp.generated.resources.search
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +43,7 @@ fun HomeTopBar(
         modifier = modifier.fillMaxWidth(),
         title = {
             Text(
-                text = state.title.getString(),
+                text = state.title.asString(),
                 style = AppTheme.typography.h2,
                 color = AppTheme.colors.text.primary
             )
@@ -132,12 +132,12 @@ private fun HomeTopBarIcon(
 fun HomeTopBarPreview() {
     HomeTopBar(
         state = HomeTopBarUiState(
-            title = UiText.Dynamic("Чаты"),
+            title = UiText.Plain("Чаты"),
             isBackVisible = true,
-            backIcon = Res.drawable.ic_arrow_back,
-            leadingIcon = Res.drawable.ic_visibility_active,
-            actionIconPrimary = Res.drawable.ic_settings,
-            actionIconSecondary = Res.drawable.ic_visibility_active
+            backIcon = Res.drawable.arrow_left,
+            leadingIcon = Res.drawable.search,
+            actionIconPrimary = Res.drawable.exit,
+            actionIconSecondary = Res.drawable.search
         )
     )
 }

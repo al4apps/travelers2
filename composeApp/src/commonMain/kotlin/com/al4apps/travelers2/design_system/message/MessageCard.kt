@@ -22,16 +22,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import intabiaplatform.composeapp.generated.resources.Res
-import intabiaplatform.composeapp.generated.resources.ic_check
-import intabiaplatform.composeapp.generated.resources.ic_image_not_found
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
-import ru.intabia.platform.shared_model.MessageAvatarUiState
-import ru.intabia.platform.shared_model.MessageCardUiState
-import ru.intabia.platform.shared_model.MessageDirection
-import ru.intabia.platform.theme.AppTheme
+import travelers2.composeapp.generated.resources.Res
+import travelers2.composeapp.generated.resources.checkmark
+import travelers2.composeapp.generated.resources.profile
+import com.al4apps.travelers2.shared_model.MessageAvatarUiState
+import com.al4apps.travelers2.shared_model.MessageCardUiState
+import com.al4apps.travelers2.shared_model.MessageDirection
+import com.al4apps.travelers2.theme.AppTheme
 
 @Composable
 fun MessageCard(
@@ -186,7 +186,7 @@ private fun MessageAvatarBlock(
             }
             else -> {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_image_not_found),
+                    painter = painterResource(Res.drawable.profile),
                     contentDescription = null,
                     tint = AppTheme.colors.icon.grayDark,
                     modifier = Modifier.size(18.dp)
@@ -203,7 +203,7 @@ fun MessageCardPreview() {
         MessageCard(
             state = MessageCardUiState.SAMPLE_INCOMING.copy(
                 avatar = MessageAvatarUiState(
-                    image = Res.drawable.ic_image_not_found,
+                    image = Res.drawable.profile,
                     initials = "ВД"
                 )
             )
@@ -211,7 +211,7 @@ fun MessageCardPreview() {
         Spacer(modifier = Modifier.size(12.dp))
         MessageCard(
             state = MessageCardUiState.SAMPLE_OUTGOING.copy(
-                statusIcon = Res.drawable.ic_check
+                statusIcon = Res.drawable.checkmark
             )
         )
     }

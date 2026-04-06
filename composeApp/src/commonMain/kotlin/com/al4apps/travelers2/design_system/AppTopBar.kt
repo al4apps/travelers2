@@ -20,13 +20,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.al4apps.kmp_wizard.design_system.SelectableWidget
-import ru.intabia.platform.shared_model.SelectableWidgetState
-import com.al4apps.kmp_wizard.shared_models.TopBarUiState
-import intabiaplatform.composeapp.generated.resources.Res
-import intabiaplatform.composeapp.generated.resources.ic_arrow_back
+import com.al4apps.travelers2.shared_model.SelectableWidgetState
+import com.al4apps.travelers2.shared_model.TopBarUiState
 import org.jetbrains.compose.resources.painterResource
-import ru.intabia.platform.theme.AppTheme
+import travelers2.composeapp.generated.resources.Res
+import travelers2.composeapp.generated.resources.arrow_left
+import com.al4apps.travelers2.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -132,7 +131,7 @@ fun AppTopBar(
 fun AppTopBarPreview() {
     AppTopBar(
         TopBarUiState.INITIAL.copy(
-            navIcon = Res.drawable.ic_arrow_back,
+            navIcon = Res.drawable.arrow_left,
             selectableWidgetState = SelectableWidgetState.INITIAL
         ),
         onBackClick = {})

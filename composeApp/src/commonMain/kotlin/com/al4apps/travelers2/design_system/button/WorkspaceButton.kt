@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.intabia.platform.theme.AppTheme
+import com.al4apps.travelers2.theme.AppTheme
 
 @Composable
 fun WorkspaceButton(

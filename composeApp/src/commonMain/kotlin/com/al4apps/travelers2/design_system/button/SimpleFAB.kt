@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.vectorResource
-import ru.intabia.platform.theme.AppTheme
+import com.al4apps.travelers2.theme.AppTheme
 
 @Composable
 fun SimpleFAB(

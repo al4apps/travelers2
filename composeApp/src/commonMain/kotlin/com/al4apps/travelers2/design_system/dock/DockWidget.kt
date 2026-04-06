@@ -24,16 +24,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.al4apps.kmp_wizard.shared_models.DockButtonUiState
-import com.al4apps.kmp_wizard.shared_models.DockIconTextButtonUiState
-import com.al4apps.kmp_wizard.shared_models.DockTextButtonUiState
-import com.al4apps.kmp_wizard.shared_models.DockUiState
-import intabiaplatform.composeapp.generated.resources.Res
-import intabiaplatform.composeapp.generated.resources.ic_favorite_selected
-import intabiaplatform.composeapp.generated.resources.ic_play
+import com.al4apps.travelers2.shared_model.DockButtonUiState
+import com.al4apps.travelers2.shared_model.DockIconTextButtonUiState
+import com.al4apps.travelers2.shared_model.DockTextButtonUiState
+import com.al4apps.travelers2.shared_model.DockUiState
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.vectorResource
-import ru.intabia.platform.theme.AppTheme
+import travelers2.composeapp.generated.resources.Res
+import travelers2.composeapp.generated.resources.plus
+import travelers2.composeapp.generated.resources.star
+import com.al4apps.travelers2.theme.AppTheme
 
 @Composable
 fun DockWidget(
@@ -161,13 +161,13 @@ fun DockWidgetPreview() {
             DockIconTextButtonUiState(
                 id = 1L,
                 title = "Play",
-                icon = Res.drawable.ic_play,
+                icon = Res.drawable.plus,
                 isSelected = true
             ),
             DockIconTextButtonUiState(
                 id = 2L,
                 title = "Fav",
-                icon = Res.drawable.ic_favorite_selected
+                icon = Res.drawable.star
             ),
             DockTextButtonUiState(
                 id = 3L,

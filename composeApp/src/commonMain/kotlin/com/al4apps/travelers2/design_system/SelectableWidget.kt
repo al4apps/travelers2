@@ -13,12 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import intabiaplatform.composeapp.generated.resources.Res
-import intabiaplatform.composeapp.generated.resources.ic_check
-import intabiaplatform.composeapp.generated.resources.ic_favorite_selected
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.vectorResource
-import ru.intabia.platform.theme.AppTheme
+import travelers2.composeapp.generated.resources.Res
+import travelers2.composeapp.generated.resources.checkmark
+import travelers2.composeapp.generated.resources.star
+import com.al4apps.travelers2.theme.AppTheme
 
 @Composable
 fun SelectableWidget(
@@ -43,7 +43,7 @@ fun SelectableWidget(
                         .background(AppTheme.colors.background.primary),
                     contentAlignment = Alignment.Center
                 ) {
-                    val icon = iconRes ?: Res.drawable.ic_check
+                    val icon = iconRes ?: Res.drawable.checkmark
                     Icon(
                         imageVector = vectorResource(icon),
                         contentDescription = null,
@@ -78,5 +78,5 @@ fun IconWidget(
 @Preview
 fun SelectableWidgetPreview() {
 //    SelectableWidget(true)
-    IconWidget(iconRes = Res.drawable.ic_favorite_selected)
+    IconWidget(iconRes = Res.drawable.star)
 }

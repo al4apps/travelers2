@@ -1,0 +1,8 @@
+<resources>
+    <string name="auth_email_label">Email</string>
+    <string name="chat_type_channel">Channel</string>
+    <string name="chat_type_private">Private</string>
+    <string name="dock_chats">Chats</string>
+    <string name="dock_contacts">Contacts</string>
+    <string name="dock_settings">Settings</string>
+</resources>
