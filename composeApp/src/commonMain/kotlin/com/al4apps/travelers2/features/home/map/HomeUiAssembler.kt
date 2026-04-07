@@ -9,8 +9,6 @@ class HomeUiAssembler {
     fun assemble(vmState: HomeVmState): HomeUiState =
         HomeUiState(
             isLoading = vmState.isLoading,
-            title = UiText.Plain(vmState.title.ifBlank { "Home" }),
-            message = UiText.Plain(vmState.message),
             errorMessage = vmState.errorMessage?.let(UiText::Plain),
         )
 }

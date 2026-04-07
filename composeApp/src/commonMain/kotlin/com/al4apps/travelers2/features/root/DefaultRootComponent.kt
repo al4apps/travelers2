@@ -49,7 +49,6 @@ class DefaultRootComponent(
         return DefaultHomeComponent(
             componentContext = componentContext,
             initializeHomeUseCase = homeDiContainer.initializeHomeUseCase,
-            getHomePlaceholderUseCase = homeDiContainer.getHomePlaceholderUseCase,
             uiAssembler = homeDiContainer.homeUiAssembler,
         )
     }

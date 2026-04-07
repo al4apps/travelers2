@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Button
@@ -19,8 +20,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.al4apps.travelers2.core.ui.asString
+import com.al4apps.travelers2.design_system.dock.DockBar
+import com.al4apps.travelers2.features.home.HomeChild
 import com.al4apps.travelers2.features.home.HomeComponent
 import com.al4apps.travelers2.features.home.PreviewHomeComponent
+import com.al4apps.travelers2.features.home.create_trip.ui.CreateTripScreen
+import com.al4apps.travelers2.features.home.profile.ui.ProfileScreen
+import com.al4apps.travelers2.features.home.search_trips.ui.SearchTripsScreen
+import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
@@ -29,29 +36,66 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
 ) {
     val uiState by component.uiState.subscribeAsState()
+    val stack by component.stack.subscribeAsState()
     val errorMessage = uiState.errorMessage
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .safeDrawingPadding()
-            .padding(horizontal = 24.dp, vertical = 32.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        when {
-            uiState.isLoading -> CircularProgressIndicator()
+    when {
+        uiState.isLoading -> Box(
+            modifier = modifier
+                .fillMaxSize()
+                .safeDrawingPadding()
+                .padding(horizontal = 24.dp, vertical = 32.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
+        }
 
-            errorMessage != null -> ScreenContent(
-                title = uiState.title.asString(),
+        errorMessage != null -> Box(
+            modifier = modifier
+                .fillMaxSize()
+                .safeDrawingPadding()
+                .padding(horizontal = 24.dp, vertical = 32.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            ScreenContent(
+                title = "Home",
                 message = errorMessage.asString(),
                 buttonLabel = "Retry",
                 onButtonClick = component::onRetryClick,
             )
+        }
 
-            else -> ScreenContent(
-                title = uiState.title.asString(),
-                message = uiState.message.asString(),
-            )
+        else -> Column(
+            modifier = modifier
+                .fillMaxSize()
+                .safeDrawingPadding()
+                .padding(vertical = 16.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding(),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 88.dp),
+                ) {
+                    Children(stack = stack) { child ->
+                        when (val instance = child.instance) {
+                            is HomeChild.SearchTrips -> SearchTripsScreen(component = instance.component)
+                            is HomeChild.CreateTrip -> CreateTripScreen(component = instance.component)
+                            is HomeChild.Profile -> ProfileScreen(component = instance.component)
+                        }
+                    }
+                }
+                DockBar(
+                    items = component.getDockItems(),
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter),
+                    onItemClick = component::onDockItemClick,
+                )
+            }
         }
     }
 }

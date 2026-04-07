@@ -3,10 +3,10 @@ package com.al4apps.travelers2.shared_model
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 import travelers2.composeapp.generated.resources.Res
-import travelers2.composeapp.generated.resources.dock_chats
-import travelers2.composeapp.generated.resources.dock_contacts
-import travelers2.composeapp.generated.resources.dock_settings
-import travelers2.composeapp.generated.resources.exit
+import travelers2.composeapp.generated.resources.dock_create_trip
+import travelers2.composeapp.generated.resources.dock_profile
+import travelers2.composeapp.generated.resources.dock_search_trips
+import travelers2.composeapp.generated.resources.plus_circle
 import travelers2.composeapp.generated.resources.profile
 import travelers2.composeapp.generated.resources.search
 
@@ -20,16 +20,16 @@ enum class DockItem(
     val titleRes: StringResource,
     val iconRes: DrawableResource
 ) {
-    CHATS(
-        titleRes = Res.string.dock_chats,
+    SEARCH_TRIPS(
+        titleRes = Res.string.dock_search_trips,
         iconRes = Res.drawable.search
     ),
-    CONTACTS(
-        titleRes = Res.string.dock_contacts,
-        iconRes = Res.drawable.profile
+    CREATE_TRIP(
+        titleRes = Res.string.dock_create_trip,
+        iconRes = Res.drawable.plus_circle
     ),
-    SETTINGS(
-        titleRes = Res.string.dock_settings,
-        iconRes = Res.drawable.exit
+    PROFILE(
+        titleRes = Res.string.dock_profile,
+        iconRes = Res.drawable.profile
     )
 }

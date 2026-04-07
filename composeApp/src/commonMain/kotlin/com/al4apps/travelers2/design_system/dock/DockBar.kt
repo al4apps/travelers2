@@ -95,9 +95,9 @@ private fun DockBarItem(
 fun DockBarPreview() {
     DockBar(
         items = listOf(
-            DockItemUiState(item = DockItem.CHATS, isSelected = false),
-            DockItemUiState(item = DockItem.CONTACTS, isSelected = true),
-            DockItemUiState(item = DockItem.SETTINGS, isSelected = false)
+            DockItemUiState(item = DockItem.SEARCH_TRIPS, isSelected = true),
+            DockItemUiState(item = DockItem.CREATE_TRIP, isSelected = false),
+            DockItemUiState(item = DockItem.PROFILE, isSelected = false)
         ),
         onItemClick = {}
     )
