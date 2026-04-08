@@ -24,9 +24,9 @@ import com.al4apps.travelers2.design_system.dock.DockBar
 import com.al4apps.travelers2.features.home.HomeChild
 import com.al4apps.travelers2.features.home.HomeComponent
 import com.al4apps.travelers2.features.home.PreviewHomeComponent
-import com.al4apps.travelers2.features.home.create_trip.ui.CreateTripScreen
-import com.al4apps.travelers2.features.home.profile.ui.ProfileScreen
-import com.al4apps.travelers2.features.home.search_trips.ui.SearchTripsScreen
+import com.al4apps.travelers2.features.create_trip.ui.CreateTripScreen
+import com.al4apps.travelers2.features.profile.ui.ProfileScreen
+import com.al4apps.travelers2.features.search_trips.ui.SearchTripsScreen
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 

@@ -1,4 +1,4 @@
-package com.al4apps.travelers2.features.home.search_trips
+package com.al4apps.travelers2.features.search_trips
 
 import com.al4apps.travelers2.core.CoroutineFeature
 import com.al4apps.travelers2.core.CoroutineFeatureImpl

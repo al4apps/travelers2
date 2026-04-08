@@ -5,4 +5,9 @@
     <string name="dock_search_trips">Поиск поездок</string>
     <string name="dock_create_trip">Создать поездку</string>
     <string name="dock_profile">Профиль</string>
+    <string name="search_trips_title">Найти поездку</string>
+    <string name="search_trips_from">Откуда</string>
+    <string name="search_trips_to">Куда</string>
+    <string name="search_trips_when">Когда</string>
+    <string name="search_trips_button">Поиск</string>
 </resources>

@@ -1,11 +1,11 @@
-package com.al4apps.travelers2.features.home.profile
+package com.al4apps.travelers2.features.create_trip
 
 import com.al4apps.travelers2.core.CoroutineFeature
 import com.al4apps.travelers2.core.CoroutineFeatureImpl
 import com.arkivanov.decompose.ComponentContext
 
-class DefaultProfileComponent(
+class DefaultCreateTripComponent(
     componentContext: ComponentContext,
-) : ProfileComponent,
+) : CreateTripComponent,
     ComponentContext by componentContext,
     CoroutineFeature by CoroutineFeatureImpl(componentContext)

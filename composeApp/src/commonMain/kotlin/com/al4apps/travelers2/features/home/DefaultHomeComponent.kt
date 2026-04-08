@@ -4,11 +4,13 @@ import com.al4apps.travelers2.core.CoroutineFeature
 import com.al4apps.travelers2.core.CoroutineFeatureImpl
 import com.al4apps.travelers2.core.StateStore
 import com.al4apps.travelers2.core.toUiState
-import com.al4apps.travelers2.features.home.create_trip.DefaultCreateTripComponent
+import com.al4apps.travelers2.features.create_trip.DefaultCreateTripComponent
 import com.al4apps.travelers2.features.home.domain.usecase.InitializeHomeUseCase
 import com.al4apps.travelers2.features.home.map.HomeUiAssembler
-import com.al4apps.travelers2.features.home.profile.DefaultProfileComponent
-import com.al4apps.travelers2.features.home.search_trips.DefaultSearchTripsComponent
+import com.al4apps.travelers2.features.home.model.HomeUiState
+import com.al4apps.travelers2.features.home.model.HomeVmState
+import com.al4apps.travelers2.features.profile.DefaultProfileComponent
+import com.al4apps.travelers2.features.search_trips.DefaultSearchTripsComponent
 import com.al4apps.travelers2.shared_model.DockItem
 import com.al4apps.travelers2.shared_model.DockItemUiState
 import com.arkivanov.decompose.ComponentContext

@@ -1,8 +1,8 @@
 package com.al4apps.travelers2.features.home.map
 
 import com.al4apps.travelers2.core.ui.UiText
-import com.al4apps.travelers2.features.home.HomeUiState
-import com.al4apps.travelers2.features.home.HomeVmState
+import com.al4apps.travelers2.features.home.model.HomeUiState
+import com.al4apps.travelers2.features.home.model.HomeVmState
 
 class HomeUiAssembler {
 

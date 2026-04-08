@@ -1,8 +1,8 @@
 package com.al4apps.travelers2.features.home
 
-import com.al4apps.travelers2.features.home.create_trip.CreateTripComponent
-import com.al4apps.travelers2.features.home.profile.ProfileComponent
-import com.al4apps.travelers2.features.home.search_trips.SearchTripsComponent
+import com.al4apps.travelers2.features.create_trip.CreateTripComponent
+import com.al4apps.travelers2.features.profile.ProfileComponent
+import com.al4apps.travelers2.features.search_trips.SearchTripsComponent
 
 sealed interface HomeChild {
     data class SearchTrips(
