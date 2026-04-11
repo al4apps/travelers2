@@ -31,7 +31,7 @@ class PreviewSearchTripsComponent : SearchTripsComponent {
 
     override fun onToClick() = Unit
 
-    override fun onDateChange(value: String) = Unit
+    override fun onDateClick() = Unit
 
     override fun onSearchClick() = Unit
 }

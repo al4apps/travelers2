@@ -9,6 +9,9 @@ sealed interface SearchTripsConfig {
     data object Form : SearchTripsConfig
 
     @Serializable
+    data object Calendar : SearchTripsConfig
+
+    @Serializable
     data class AddressSearch(
         val field: SearchTripsAddressField,
     ) : SearchTripsConfig

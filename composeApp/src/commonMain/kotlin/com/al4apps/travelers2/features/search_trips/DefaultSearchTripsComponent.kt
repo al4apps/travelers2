@@ -8,6 +8,7 @@ import com.al4apps.travelers2.core.log.kmpLogger
 import com.al4apps.travelers2.core.toUiState
 import com.al4apps.travelers2.features.search_trips.address_search.AddressSearchCatalog
 import com.al4apps.travelers2.features.search_trips.address_search.DefaultAddressSearchComponent
+import com.al4apps.travelers2.features.search_trips.calendar.DefaultCalendarComponent
 import com.al4apps.travelers2.features.search_trips.map.SearchTripsUiAssembler
 import com.al4apps.travelers2.features.search_trips.model.SearchTripsUiState
 import com.al4apps.travelers2.features.search_trips.model.SearchTripsVmState
@@ -57,6 +58,15 @@ class DefaultSearchTripsComponent(
         when (config) {
             SearchTripsConfig.Form -> SearchTripsChild.Form
 
+            SearchTripsConfig.Calendar -> SearchTripsChild.Calendar(
+                component = DefaultCalendarComponent(
+                    componentContext = componentContext,
+                    initialDate = vmStateStore.value.tripDate,
+                    onDateSelected = ::onDateSelected,
+                    onCloseClick = ::closeCalendar,
+                ),
+            )
+
             is SearchTripsConfig.AddressSearch -> SearchTripsChild.AddressSearch(
                 component = DefaultAddressSearchComponent(
                     componentContext = componentContext,
@@ -88,10 +98,9 @@ class DefaultSearchTripsComponent(
         navigation.pushNew(SearchTripsConfig.AddressSearch(SearchTripsAddressField.TO))
     }
 
-    override fun onDateChange(value: String) {
-        vmStateStore.updateState {
-            it.copy(tripDate = value)
-        }
+    override fun onDateClick() {
+        logger.debug("onDateClick")
+        navigation.pushNew(SearchTripsConfig.Calendar)
     }
 
     override fun onSearchClick() = Unit
@@ -112,6 +121,17 @@ class DefaultSearchTripsComponent(
         }
 
         closeAddressSearch()
+    }
+
+    private fun onDateSelected(value: String) {
+        vmStateStore.updateState {
+            it.copy(tripDate = value)
+        }
+        navigation.pop()
+    }
+
+    private fun closeCalendar() {
+        navigation.pop()
     }
 
     private fun registerStateKeeper() {

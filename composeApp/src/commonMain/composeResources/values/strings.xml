@@ -10,4 +10,11 @@
     <string name="search_trips_to">Куда</string>
     <string name="search_trips_when">Когда</string>
     <string name="search_trips_button">Поиск</string>
+    <string name="calendar_weekday_mon">Пн</string>
+    <string name="calendar_weekday_tue">Вт</string>
+    <string name="calendar_weekday_wed">Ср</string>
+    <string name="calendar_weekday_thu">Чт</string>
+    <string name="calendar_weekday_fri">Пт</string>
+    <string name="calendar_weekday_sat">Сб</string>
+    <string name="calendar_weekday_sun">Вс</string>
 </resources>

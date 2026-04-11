@@ -12,7 +12,7 @@ interface SearchTripsComponent {
 
     fun onToClick()
 
-    fun onDateChange(value: String)
+    fun onDateClick()
 
     fun onSearchClick()
 }
