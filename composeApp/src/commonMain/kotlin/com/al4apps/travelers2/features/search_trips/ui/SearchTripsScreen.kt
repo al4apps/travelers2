@@ -1,5 +1,7 @@
 package com.al4apps.travelers2.features.search_trips.ui
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,35 +17,77 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.al4apps.travelers2.core.ui.UiText
+import com.al4apps.travelers2.core.ui.asString
 import com.al4apps.travelers2.design_system.button.PrimaryButton
 import com.al4apps.travelers2.design_system.input.TravelersFormTextField
 import com.al4apps.travelers2.features.search_trips.PreviewSearchTripsComponent
+import com.al4apps.travelers2.features.search_trips.SearchTripsChild
 import com.al4apps.travelers2.features.search_trips.SearchTripsComponent
+import com.al4apps.travelers2.features.search_trips.address_search.ui.AddressSearchScreen
 import com.al4apps.travelers2.theme.AppTheme
-import org.jetbrains.compose.resources.stringResource
+import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import travelers2.composeapp.generated.resources.Res
 import travelers2.composeapp.generated.resources.calendar
 import travelers2.composeapp.generated.resources.pin
-import travelers2.composeapp.generated.resources.search_trips_button
-import travelers2.composeapp.generated.resources.search_trips_from
-import travelers2.composeapp.generated.resources.search_trips_title
-import travelers2.composeapp.generated.resources.search_trips_to
-import travelers2.composeapp.generated.resources.search_trips_when
 
 @Composable
-fun SearchTripsScreen(component: SearchTripsComponent) {
-    var departure by remember { mutableStateOf("") } // перенести в дальнейшем в компонент
-    var destination by remember { mutableStateOf("") } // перенести в дальнейшем в компонент
-    var tripDate by remember { mutableStateOf("") } // перенести в дальнейшем в компонент
+fun SearchTripsScreen(
+    component: SearchTripsComponent,
+    modifier: Modifier = Modifier,
+) {
+    val uiState by component.uiState.subscribeAsState()
 
+    Children(
+        stack = component.stack,
+        modifier = modifier,
+    ) { child ->
+        when (val instance = child.instance) {
+            SearchTripsChild.Form -> SearchTripsFormContent(
+                title = uiState.title.asString(),
+                fromAddress = uiState.fromAddress,
+                toAddress = uiState.toAddress,
+                tripDate = uiState.tripDate,
+                fromPlaceholder = uiState.fromPlaceholder.asString(),
+                toPlaceholder = uiState.toPlaceholder.asString(),
+                datePlaceholder = uiState.datePlaceholder.asString(),
+                buttonText = uiState.searchButtonText.asString(),
+                onFromClick = component::onFromClick,
+                onToClick = component::onToClick,
+                onDateChange = component::onDateChange,
+                onSearchClick = component::onSearchClick,
+            )
+
+            is SearchTripsChild.AddressSearch -> AddressSearchScreen(
+                component = instance.component,
+                modifier = modifier,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SearchTripsFormContent(
+    title: String,
+    fromAddress: String,
+    toAddress: String,
+    tripDate: String,
+    fromPlaceholder: String,
+    toPlaceholder: String,
+    datePlaceholder: String,
+    buttonText: String,
+    onFromClick: () -> Unit,
+    onToClick: () -> Unit,
+    onDateChange: (String) -> Unit,
+    onSearchClick: () -> Unit,
+) {
+    val source = remember { MutableInteractionSource() }
+    if (source.collectIsPressedAsState().value) onFromClick()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -65,35 +109,41 @@ fun SearchTripsScreen(component: SearchTripsComponent) {
                 verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
                 Text(
-                    text = stringResource(Res.string.search_trips_title),
+                    text = title,
                     style = AppTheme.typography.h2,
                     color = AppTheme.colors.text.default,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 TravelersFormTextField(
-                    value = departure,
-                    placeholder = UiText.Resource(Res.string.search_trips_from),
+                    value = fromAddress,
+                    placeholder = com.al4apps.travelers2.core.ui.UiText.Plain(fromPlaceholder),
                     icon = Res.drawable.pin,
-                    onValueChange = { departure = it },
+                    enabled = false,
+                    readOnly = true,
+                    onClick = onFromClick,
+                    onValueChange = {},
                 )
                 TravelersFormTextField(
-                    value = destination,
-                    placeholder = UiText.Resource(Res.string.search_trips_to),
+                    value = toAddress,
+                    placeholder = com.al4apps.travelers2.core.ui.UiText.Plain(toPlaceholder),
                     icon = Res.drawable.pin,
-                    onValueChange = { destination = it },
+                    readOnly = true,
+                    enabled = false,
+                    onClick = onToClick,
+                    onValueChange = {},
                 )
                 TravelersFormTextField(
                     value = tripDate,
-                    placeholder = UiText.Resource(Res.string.search_trips_when),
+                    placeholder = com.al4apps.travelers2.core.ui.UiText.Plain(datePlaceholder),
                     icon = Res.drawable.calendar,
-                    onValueChange = { tripDate = it },
+                    onValueChange = onDateChange,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 PrimaryButton(
-                    text = stringResource(Res.string.search_trips_button),
+                    text = buttonText,
                     enabled = true,
                     modifier = Modifier.widthIn(min = 160.dp),
-                    onClick = {},
+                    onClick = onSearchClick,
                 )
             }
         }
