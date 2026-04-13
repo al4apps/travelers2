@@ -3,6 +3,7 @@ package com.al4apps.travelers2.design_system.dock
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +40,7 @@ import com.al4apps.travelers2.theme.AppTheme
 fun DockWidget(
     state: DockUiState,
     modifier: Modifier = Modifier,
+    isItemsFillWidth: Boolean = false,
     onItemClick: (Long) -> Unit
 ) {
     Card(
@@ -53,23 +55,28 @@ fun DockWidget(
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp, vertical = 6.dp)
                 .align(Alignment.CenterHorizontally),
-            horizontalArrangement = Arrangement.SpaceAround,
+            horizontalArrangement = if (isItemsFillWidth) Arrangement.spacedBy(0.dp) else Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
             state.items.forEach { item ->
-                when (item) {
-                    is DockIconTextButtonUiState -> {
-                        DockIconTextButton(
-                            state = item,
-                            onClick = { onItemClick(item.id) }
-                        )
-                    }
+                Box(
+                    modifier = if (isItemsFillWidth) Modifier.weight(1f) else Modifier,
+                    contentAlignment = Alignment.Center,
+                ) {
+                    when (item) {
+                        is DockIconTextButtonUiState -> {
+                            DockIconTextButton(
+                                state = item,
+                                onClick = { onItemClick(item.id) }
+                            )
+                        }
 
-                    is DockTextButtonUiState -> {
-                        DockTextButton(
-                            state = item,
-                            onClick = { onItemClick(item.id) }
-                        )
+                        is DockTextButtonUiState -> {
+                            DockTextButton(
+                                state = item,
+                                onClick = { onItemClick(item.id) }
+                            )
+                        }
                     }
                 }
             }

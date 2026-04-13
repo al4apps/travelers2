@@ -10,6 +10,10 @@
     <string name="search_trips_to">Куда</string>
     <string name="search_trips_when">Когда</string>
     <string name="search_trips_button">Поиск</string>
+    <string name="search_results_tab_all">Все</string>
+    <string name="search_results_tab_cars">Легковые</string>
+    <string name="search_results_tab_buses">Автобусы</string>
+    <string name="search_results_passenger_one">1 пассажир</string>
     <string name="calendar_weekday_mon">Пн</string>
     <string name="calendar_weekday_tue">Вт</string>
     <string name="calendar_weekday_wed">Ср</string>

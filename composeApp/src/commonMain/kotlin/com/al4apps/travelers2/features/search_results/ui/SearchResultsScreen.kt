@@ -1,62 +1,108 @@
 package com.al4apps.travelers2.features.search_results.ui
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.al4apps.travelers2.core.model.TripDateFormatter
-import com.al4apps.travelers2.core.model.toDisplayString
+import com.al4apps.travelers2.design_system.SearchResultsTopBar
+import com.al4apps.travelers2.design_system.SearchResultsTopBarUiState
+import com.al4apps.travelers2.design_system.dock.DockWidget
+import com.al4apps.travelers2.shared_model.DockUiState
 import com.al4apps.travelers2.features.search_results.PreviewSearchResultsComponent
 import com.al4apps.travelers2.features.search_results.SearchResultsComponent
-import com.al4apps.travelers2.theme.AppTheme
+import com.al4apps.travelers2.shared_model.DockTextButtonUiState
+import org.jetbrains.compose.resources.stringResource
+import travelers2.composeapp.generated.resources.Res
+import travelers2.composeapp.generated.resources.search_results_passenger_one
+import travelers2.composeapp.generated.resources.search_results_tab_all
+import travelers2.composeapp.generated.resources.search_results_tab_buses
+import travelers2.composeapp.generated.resources.search_results_tab_cars
 
 @Composable
 fun SearchResultsScreen(
     component: SearchResultsComponent,
     modifier: Modifier = Modifier,
 ) {
+    var selectedTabId by remember { mutableLongStateOf(Tab.ALL.id) }
+
+    val from = component.query.fromAddress.toRoutePoint()
+    val to = component.query.toAddress.toRoutePoint()
+    val routeTitle = "$from -> $to"
+    val date = component.query.tripDate?.let(TripDateFormatter::toDisplayString).orEmpty()
+    val passengers = stringResource(Res.string.search_results_passenger_one)
+    val subtitle = if (date.isEmpty()) {
+        passengers
+    } else {
+        "$date, $passengers"
+    }
+    val tabStates = listOf(
+        DockTextButtonUiState(
+            id = Tab.ALL.id,
+            title = stringResource(Res.string.search_results_tab_all),
+            isSelected = selectedTabId == Tab.ALL.id,
+        ),
+        DockTextButtonUiState(
+            id = Tab.CARS.id,
+            title = stringResource(Res.string.search_results_tab_cars),
+            isSelected = selectedTabId == Tab.CARS.id,
+        ),
+        DockTextButtonUiState(
+            id = Tab.BUSES.id,
+            title = stringResource(Res.string.search_results_tab_buses),
+            isSelected = selectedTabId == Tab.BUSES.id,
+        ),
+    )
+    val dockState = DockUiState(items = tabStates)
+
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+            .safeDrawingPadding(),
     ) {
-        Button(onClick = component::onBackClick) {
-            Text("Назад")
-        }
-        Text(
-            text = "Результаты поиска (placeholder)",
-            style = AppTheme.typography.h2,
-            color = AppTheme.colors.text.default,
+        SearchResultsTopBar(
+            state = SearchResultsTopBarUiState(
+                routeTitle = routeTitle,
+                subtitle = subtitle,
+            ),
+            onBackClick = component::onBackClick,
         )
-        Text(
-            text = "Откуда: ${component.query.fromAddress?.toDisplayString().orEmpty()}",
-            style = AppTheme.typography.body1,
-            color = AppTheme.colors.text.default,
-            modifier = Modifier.fillMaxWidth(),
+        DockWidget(
+            state = dockState,
+            isItemsFillWidth = true,
+            onItemClick = { id -> selectedTabId = id },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
         )
-        Text(
-            text = "Куда: ${component.query.toAddress?.toDisplayString().orEmpty()}",
-            style = AppTheme.typography.body1,
-            color = AppTheme.colors.text.default,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Text(
-            text = "Когда: ${component.query.tripDate?.let(TripDateFormatter::toDisplayString).orEmpty()}",
-            style = AppTheme.typography.body1,
-            color = AppTheme.colors.text.default,
-            modifier = Modifier.fillMaxWidth(),
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 8.dp),
         )
     }
+}
+
+private enum class Tab(val id: Long) {
+    ALL(1L),
+    CARS(2L),
+    BUSES(3L),
+}
+
+private fun com.al4apps.travelers2.core.model.TripAddress?.toRoutePoint(): String {
+    val town = this?.town.orEmpty()
+    val locality = this?.locality?.takeIf { it.isNotBlank() } ?: return town
+    return "$town ($locality)"
 }
 
 @Preview
