@@ -7,7 +7,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
-class PreviewSearchTripsComponent : SearchTripsComponent {
+class PreviewSearchFormComponent : SearchFormComponent {
     override val uiState: Value<SearchTripsUiState> =
         MutableValue(
             SearchTripsUiAssembler().assemble(

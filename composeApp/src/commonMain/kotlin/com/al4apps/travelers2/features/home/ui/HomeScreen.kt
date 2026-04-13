@@ -26,7 +26,7 @@ import com.al4apps.travelers2.features.home.HomeComponent
 import com.al4apps.travelers2.features.home.PreviewHomeComponent
 import com.al4apps.travelers2.features.create_trip.ui.CreateTripScreen
 import com.al4apps.travelers2.features.profile.ui.ProfileScreen
-import com.al4apps.travelers2.features.search_trips.ui.SearchTripsScreen
+import com.al4apps.travelers2.features.search.ui.SearchScreen
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
@@ -83,7 +83,7 @@ fun HomeScreen(
                 ) {
                     Children(stack = stack) { child ->
                         when (val instance = child.instance) {
-                            is HomeChild.SearchTrips -> SearchTripsScreen(component = instance.component)
+                            is HomeChild.SearchTrips -> SearchScreen(component = instance.component)
                             is HomeChild.CreateTrip -> CreateTripScreen(component = instance.component)
                             is HomeChild.Profile -> ProfileScreen(component = instance.component)
                         }

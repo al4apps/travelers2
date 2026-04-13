@@ -10,7 +10,7 @@ import com.al4apps.travelers2.features.home.map.HomeUiAssembler
 import com.al4apps.travelers2.features.home.model.HomeUiState
 import com.al4apps.travelers2.features.home.model.HomeVmState
 import com.al4apps.travelers2.features.profile.DefaultProfileComponent
-import com.al4apps.travelers2.features.search_trips.DefaultSearchTripsComponent
+import com.al4apps.travelers2.features.search.DefaultSearchFeatureComponent
 import com.al4apps.travelers2.shared_model.DockItem
 import com.al4apps.travelers2.shared_model.DockItemUiState
 import com.arkivanov.decompose.ComponentContext
@@ -115,7 +115,7 @@ class DefaultHomeComponent(
     ): HomeChild =
         when (config) {
             HomeConfig.SearchTrips -> HomeChild.SearchTrips(
-                component = DefaultSearchTripsComponent(componentContext = componentContext),
+                component = DefaultSearchFeatureComponent(componentContext = componentContext),
             )
 
             HomeConfig.CreateTrip -> HomeChild.CreateTrip(

@@ -24,9 +24,9 @@ import com.al4apps.travelers2.core.ui.UiText
 import com.al4apps.travelers2.core.ui.asString
 import com.al4apps.travelers2.design_system.button.PrimaryButton
 import com.al4apps.travelers2.design_system.input.TravelersFormTextField
-import com.al4apps.travelers2.features.search_trips.PreviewSearchTripsComponent
+import com.al4apps.travelers2.features.search_trips.PreviewSearchFormComponent
 import com.al4apps.travelers2.features.search_trips.SearchTripsChild
-import com.al4apps.travelers2.features.search_trips.SearchTripsComponent
+import com.al4apps.travelers2.features.search_trips.SearchFormComponent
 import com.al4apps.travelers2.features.search_trips.address_search.ui.AddressSearchScreen
 import com.al4apps.travelers2.features.search_trips.calendar.ui.CalendarContent
 import com.al4apps.travelers2.theme.AppTheme
@@ -38,7 +38,7 @@ import travelers2.composeapp.generated.resources.pin
 
 @Composable
 fun SearchTripsScreen(
-    component: SearchTripsComponent,
+    component: SearchFormComponent,
     modifier: Modifier = Modifier,
 ) {
     val uiState by component.uiState.subscribeAsState()
@@ -166,5 +166,5 @@ private fun SearchTripsFormContent(
 @Preview
 @Composable
 private fun SearchTripsScreenPreview() {
-    SearchTripsScreen(component = PreviewSearchTripsComponent())
+    SearchTripsScreen(component = PreviewSearchFormComponent())
 }

@@ -20,11 +20,12 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.value.Value
 
-class DefaultSearchTripsComponent(
+class DefaultSearchFormComponent(
     componentContext: ComponentContext,
+    private val onSearchRequested: (fromAddress: String, toAddress: String, tripDate: String) -> Unit = { _, _, _ -> },
     private val uiAssembler: SearchTripsUiAssembler = SearchTripsUiAssembler(),
-    private val logger: KmpLogger = kmpLogger<DefaultSearchTripsComponent>()
-) : SearchTripsComponent,
+    private val logger: KmpLogger = kmpLogger<DefaultSearchFormComponent>()
+) : SearchFormComponent,
     ComponentContext by componentContext,
     CoroutineFeature by CoroutineFeatureImpl(componentContext) {
 
@@ -103,7 +104,14 @@ class DefaultSearchTripsComponent(
         navigation.pushNew(SearchTripsConfig.Calendar)
     }
 
-    override fun onSearchClick() = Unit
+    override fun onSearchClick() {
+        val vmState = vmStateStore.value
+        onSearchRequested(
+            vmState.fromAddress,
+            vmState.toAddress,
+            vmState.tripDate,
+        )
+    }
 
     private fun closeAddressSearch() {
         navigation.pop()

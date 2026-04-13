@@ -1,7 +1,7 @@
 package com.al4apps.travelers2.features.home
 
 import com.al4apps.travelers2.features.home.model.HomeUiState
-import com.al4apps.travelers2.features.search_trips.PreviewSearchTripsComponent
+import com.al4apps.travelers2.features.search.PreviewSearchFeatureComponent
 import com.al4apps.travelers2.shared_model.DockItem
 import com.al4apps.travelers2.shared_model.DockItemUiState
 import com.arkivanov.decompose.router.stack.ChildStack
@@ -21,7 +21,7 @@ class PreviewHomeComponent : HomeComponent {
             ChildStack(
                 configuration = HomeConfig.SearchTrips,
                 instance = HomeChild.SearchTrips(
-                    component = PreviewSearchTripsComponent(),
+                    component = PreviewSearchFeatureComponent(),
                 ),
             ),
         )
