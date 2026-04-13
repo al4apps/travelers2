@@ -1,12 +1,12 @@
 package com.al4apps.travelers2.features.search_trips.calendar.map
 
 import com.al4apps.travelers2.core.ui.UiText
+import com.al4apps.travelers2.core.model.TripDate
 import com.al4apps.travelers2.features.search_trips.calendar.model.CalendarDayUiState
 import com.al4apps.travelers2.features.search_trips.calendar.model.CalendarMonth
 import com.al4apps.travelers2.features.search_trips.calendar.model.CalendarUiState
 import com.al4apps.travelers2.features.search_trips.calendar.model.CalendarVmState
 import com.al4apps.travelers2.features.search_trips.calendar.model.CalendarWeekday
-import com.al4apps.travelers2.features.search_trips.model.CalendarDate
 
 class CalendarUiAssembler {
     fun assemble(vmState: CalendarVmState): CalendarUiState {
@@ -28,7 +28,7 @@ class CalendarUiAssembler {
         }
 
         for (day in 1..daysInMonth) {
-            val date = CalendarDate(
+            val date = TripDate(
                 year = vmState.displayedYear,
                 month = vmState.displayedMonth,
                 day = day,

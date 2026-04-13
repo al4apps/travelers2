@@ -5,6 +5,9 @@ import com.al4apps.travelers2.core.CoroutineFeatureImpl
 import com.al4apps.travelers2.core.StateStore
 import com.al4apps.travelers2.core.log.KmpLogger
 import com.al4apps.travelers2.core.log.kmpLogger
+import com.al4apps.travelers2.core.model.TripAddress
+import com.al4apps.travelers2.core.model.TripDate
+import com.al4apps.travelers2.core.model.toDisplayString
 import com.al4apps.travelers2.core.toUiState
 import com.al4apps.travelers2.features.search_trips.address_search.AddressSearchCatalog
 import com.al4apps.travelers2.features.search_trips.address_search.DefaultAddressSearchComponent
@@ -22,7 +25,7 @@ import com.arkivanov.decompose.value.Value
 
 class DefaultSearchFormComponent(
     componentContext: ComponentContext,
-    private val onSearchRequested: (fromAddress: String, toAddress: String, tripDate: String) -> Unit = { _, _, _ -> },
+    private val onSearchRequested: (fromAddress: TripAddress?, toAddress: TripAddress?, tripDate: TripDate?) -> Unit = { _, _, _ -> },
     private val uiAssembler: SearchTripsUiAssembler = SearchTripsUiAssembler(),
     private val logger: KmpLogger = kmpLogger<DefaultSearchFormComponent>()
 ) : SearchFormComponent,
@@ -119,7 +122,7 @@ class DefaultSearchFormComponent(
 
     private fun applySelectedAddress(
         field: SearchTripsAddressField,
-        address: String,
+        address: TripAddress,
     ) {
         vmStateStore.updateState { state ->
             when (field) {
@@ -131,7 +134,7 @@ class DefaultSearchFormComponent(
         closeAddressSearch()
     }
 
-    private fun onDateSelected(value: String) {
+    private fun onDateSelected(value: TripDate) {
         vmStateStore.updateState {
             it.copy(tripDate = value)
         }
@@ -157,6 +160,6 @@ class DefaultSearchFormComponent(
 
 private fun SearchTripsAddressField.extractValue(state: SearchTripsVmState): String =
     when (this) {
-        SearchTripsAddressField.FROM -> state.fromAddress
-        SearchTripsAddressField.TO -> state.toAddress
+        SearchTripsAddressField.FROM -> state.fromAddress?.toDisplayString().orEmpty()
+        SearchTripsAddressField.TO -> state.toAddress?.toDisplayString().orEmpty()
     }

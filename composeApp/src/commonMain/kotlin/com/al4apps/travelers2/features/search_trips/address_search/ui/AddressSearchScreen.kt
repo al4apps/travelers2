@@ -13,16 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.al4apps.travelers2.design_system.HomeTopBar
+import com.al4apps.travelers2.core.model.TripAddress
+import com.al4apps.travelers2.core.model.toDisplayString
 import com.al4apps.travelers2.design_system.input.TravelersFormTextField
 import com.al4apps.travelers2.features.search_trips.address_search.AddressSearchComponent
 import com.al4apps.travelers2.features.search_trips.address_search.PreviewAddressSearchComponent
-import com.al4apps.travelers2.shared_model.HomeTopBarUiState
 import com.al4apps.travelers2.theme.AppTheme
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import travelers2.composeapp.generated.resources.Res
 import travelers2.composeapp.generated.resources.ic_arrow_back
-import travelers2.composeapp.generated.resources.pin
 
 @Composable
 fun AddressSearchScreen(
@@ -49,7 +48,7 @@ fun AddressSearchScreen(
         ) {
             items(
                 items = uiState.results,
-                key = { address -> address },
+                key = { address -> "${address.country}_${address.region}_${address.town}_${address.locality.orEmpty()}" },
             ) { address ->
                 AddressResultItem(
                     address = address,
@@ -62,7 +61,7 @@ fun AddressSearchScreen(
 
 @Composable
 private fun AddressResultItem(
-    address: String,
+    address: TripAddress,
     onClick: () -> Unit,
 ) {
     Column(
@@ -72,7 +71,7 @@ private fun AddressResultItem(
             .padding(horizontal = 16.dp),
     ) {
         Text(
-            text = address,
+            text = address.toDisplayString(),
             style = AppTheme.typography.body1,
             color = AppTheme.colors.text.default,
             modifier = Modifier.padding(vertical = 16.dp),

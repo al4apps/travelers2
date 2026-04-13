@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.al4apps.travelers2.core.model.TripDateFormatter
+import com.al4apps.travelers2.core.model.toDisplayString
 import com.al4apps.travelers2.features.search_results.PreviewSearchResultsComponent
 import com.al4apps.travelers2.features.search_results.SearchResultsComponent
 import com.al4apps.travelers2.theme.AppTheme
@@ -37,19 +39,19 @@ fun SearchResultsScreen(
             color = AppTheme.colors.text.default,
         )
         Text(
-            text = "Откуда: ${component.query.fromAddress}",
+            text = "Откуда: ${component.query.fromAddress?.toDisplayString().orEmpty()}",
             style = AppTheme.typography.body1,
             color = AppTheme.colors.text.default,
             modifier = Modifier.fillMaxWidth(),
         )
         Text(
-            text = "Куда: ${component.query.toAddress}",
+            text = "Куда: ${component.query.toAddress?.toDisplayString().orEmpty()}",
             style = AppTheme.typography.body1,
             color = AppTheme.colors.text.default,
             modifier = Modifier.fillMaxWidth(),
         )
         Text(
-            text = "Когда: ${component.query.tripDate}",
+            text = "Когда: ${component.query.tripDate?.let(TripDateFormatter::toDisplayString).orEmpty()}",
             style = AppTheme.typography.body1,
             color = AppTheme.colors.text.default,
             modifier = Modifier.fillMaxWidth(),

@@ -1,5 +1,6 @@
 package com.al4apps.travelers2.features.search_trips.address_search
 
+import com.al4apps.travelers2.core.model.TripAddress
 import com.al4apps.travelers2.features.search_trips.SearchTripsAddressField
 import com.al4apps.travelers2.features.search_trips.address_search.map.AddressSearchUiAssembler
 import com.al4apps.travelers2.features.search_trips.address_search.model.AddressSearchUiState
@@ -21,5 +22,5 @@ class PreviewAddressSearchComponent : AddressSearchComponent {
 
     override fun onBackClick() = Unit
 
-    override fun onAddressClick(address: String) = Unit
+    override fun onAddressClick(address: TripAddress) = Unit
 }

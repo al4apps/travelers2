@@ -1,8 +1,8 @@
 package com.al4apps.travelers2.features.search_trips.calendar.map
 
-import com.al4apps.travelers2.features.search_trips.model.CalendarDate
+import com.al4apps.travelers2.core.model.TripDate
 
-fun CalendarDate.isBefore(other: CalendarDate): Boolean =
+fun TripDate.isBefore(other: TripDate): Boolean =
     when {
         year != other.year -> year < other.year
         month != other.month -> month < other.month

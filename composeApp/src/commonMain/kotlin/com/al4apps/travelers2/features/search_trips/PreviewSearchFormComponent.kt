@@ -11,11 +11,7 @@ class PreviewSearchFormComponent : SearchFormComponent {
     override val uiState: Value<SearchTripsUiState> =
         MutableValue(
             SearchTripsUiAssembler().assemble(
-                SearchTripsVmState(
-                    fromAddress = "",
-                    toAddress = "",
-                    tripDate = "",
-                ),
+                SearchTripsVmState(),
             ),
         )
 

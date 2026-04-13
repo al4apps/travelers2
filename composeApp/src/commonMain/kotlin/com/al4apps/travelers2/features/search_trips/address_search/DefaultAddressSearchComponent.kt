@@ -4,6 +4,7 @@ import com.al4apps.travelers2.core.CoroutineFeature
 import com.al4apps.travelers2.core.CoroutineFeatureImpl
 import com.al4apps.travelers2.core.StateStore
 import com.al4apps.travelers2.core.toUiState
+import com.al4apps.travelers2.core.model.TripAddress
 import com.al4apps.travelers2.features.search_trips.SearchTripsAddressField
 import com.al4apps.travelers2.features.search_trips.address_search.map.AddressSearchUiAssembler
 import com.al4apps.travelers2.features.search_trips.address_search.model.AddressSearchUiState
@@ -15,9 +16,9 @@ class DefaultAddressSearchComponent(
     componentContext: ComponentContext,
     private val field: SearchTripsAddressField,
     initialQuery: String,
-    private val addresses: List<String>,
+    private val addresses: List<TripAddress>,
     private val onBackClick: () -> Unit,
-    private val onAddressClick: (String) -> Unit,
+    private val onAddressClick: (TripAddress) -> Unit,
     private val uiAssembler: AddressSearchUiAssembler = AddressSearchUiAssembler(),
 ) : AddressSearchComponent,
     ComponentContext by componentContext,
@@ -59,7 +60,7 @@ class DefaultAddressSearchComponent(
         onBackClick.invoke()
     }
 
-    override fun onAddressClick(address: String) {
+    override fun onAddressClick(address: TripAddress) {
         onAddressClick.invoke(address)
     }
 

@@ -1,5 +1,7 @@
 package com.al4apps.travelers2.features.search
 
+import com.al4apps.travelers2.core.model.TripAddress
+import com.al4apps.travelers2.core.model.TripDate
 import com.al4apps.travelers2.core.CoroutineFeature
 import com.al4apps.travelers2.core.CoroutineFeatureImpl
 import com.al4apps.travelers2.features.search.model.SearchQuery
@@ -51,9 +53,9 @@ class DefaultSearchFeatureComponent(
         }
 
     private fun onSearchRequested(
-        fromAddress: String,
-        toAddress: String,
-        tripDate: String,
+        fromAddress: TripAddress?,
+        toAddress: TripAddress?,
+        tripDate: TripDate?,
     ) {
         navigation.pushNew(
             SearchConfig.Results(

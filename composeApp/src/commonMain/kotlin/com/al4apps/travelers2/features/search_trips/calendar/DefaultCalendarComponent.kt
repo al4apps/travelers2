@@ -5,21 +5,20 @@ import com.al4apps.travelers2.core.CoroutineFeatureImpl
 import com.al4apps.travelers2.core.StateStore
 import com.al4apps.travelers2.core.platform.PlatformDate
 import com.al4apps.travelers2.core.platform.currentPlatformDate
+import com.al4apps.travelers2.core.model.TripDate
 import com.al4apps.travelers2.core.toUiState
-import com.al4apps.travelers2.features.search_trips.calendar.map.CalendarDateFormatter
 import com.al4apps.travelers2.features.search_trips.calendar.map.CalendarUiAssembler
 import com.al4apps.travelers2.features.search_trips.calendar.map.isBefore
 import com.al4apps.travelers2.features.search_trips.calendar.map.isBeforeMonth
 import com.al4apps.travelers2.features.search_trips.calendar.model.CalendarUiState
 import com.al4apps.travelers2.features.search_trips.calendar.model.CalendarVmState
-import com.al4apps.travelers2.features.search_trips.model.CalendarDate
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 
 class DefaultCalendarComponent(
     componentContext: ComponentContext,
-    initialDate: String,
-    private val onDateSelected: (String) -> Unit,
+    initialDate: TripDate?,
+    private val onDateSelected: (TripDate) -> Unit,
     private val onCloseClick: () -> Unit,
     private val uiAssembler: CalendarUiAssembler = CalendarUiAssembler(),
 ) : CalendarComponent,
@@ -88,7 +87,7 @@ class DefaultCalendarComponent(
 
     override fun onDayClick(day: Int) {
         val state = vmStateStore.value
-        val selected = CalendarDate(
+        val selected = TripDate(
             year = state.displayedYear,
             month = state.displayedMonth,
             day = day,
@@ -98,12 +97,12 @@ class DefaultCalendarComponent(
         vmStateStore.updateState {
             it.copy(selectedDate = selected)
         }
-        onDateSelected.invoke(CalendarDateFormatter.toViewString(selected))
+        onDateSelected.invoke(selected)
     }
 
-    private fun initialVmState(initialDate: String): CalendarVmState {
+    private fun initialVmState(initialDate: TripDate?): CalendarVmState {
         val today = currentPlatformDate().toCalendarDate()
-        val selectedDate = CalendarDateFormatter.parseOrNull(initialDate)
+        val selectedDate = initialDate
         val initialDisplayedDate = when {
             selectedDate == null -> today
             selectedDate.isBefore(today) -> today
@@ -137,8 +136,8 @@ class DefaultCalendarComponent(
     }
 }
 
-private fun PlatformDate.toCalendarDate(): CalendarDate =
-    CalendarDate(
+private fun PlatformDate.toCalendarDate(): TripDate =
+    TripDate(
         year = year,
         month = month,
         day = day,
