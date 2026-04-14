@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.al4apps.travelers2.core.ui.asString
+import com.al4apps.travelers2.core.ui.getString
 import org.jetbrains.compose.resources.vectorResource
 import com.al4apps.travelers2.shared_model.MessageInputActionType
 import com.al4apps.travelers2.shared_model.MessageInputBarUiState
@@ -76,7 +76,7 @@ fun MessageInputBar(
             ) {
                 if (state.text.isBlank()) {
                     Text(
-                        text = state.placeholder.asString(),
+                        text = state.placeholder.getString(),
                         style = AppTheme.typography.body1,
                         color = AppTheme.colors.text.tertiary
                     )

@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.al4apps.travelers2.core.ui.UiText
-import com.al4apps.travelers2.core.ui.asString
+import com.al4apps.travelers2.core.ui.getString
 import com.al4apps.travelers2.theme.AppTheme
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -58,7 +58,7 @@ fun TravelersFormTextField(
         ),
         placeholder = {
             Text(
-                text = placeholder.asString(),
+                text = placeholder.getString(),
                 style = AppTheme.typography.body1,
                 color = AppTheme.colors.text.tertiary,
             )

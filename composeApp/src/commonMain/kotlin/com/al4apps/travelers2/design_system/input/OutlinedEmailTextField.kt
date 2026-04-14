@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.al4apps.travelers2.core.ui.UiText
-import com.al4apps.travelers2.core.ui.asString
+import com.al4apps.travelers2.core.ui.getString
 import org.jetbrains.compose.resources.stringResource
 import travelers2.composeapp.generated.resources.Res
 import travelers2.composeapp.generated.resources.auth_email_label
@@ -51,7 +51,7 @@ fun OutlinedEmailTextField(
     if (isError && errorText != null) {
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = errorText.asString(),
+            text = errorText.getString(),
             style = AppTheme.typography.caption,
             color = AppTheme.colors.icon.error,
             modifier = Modifier.fillMaxWidth()

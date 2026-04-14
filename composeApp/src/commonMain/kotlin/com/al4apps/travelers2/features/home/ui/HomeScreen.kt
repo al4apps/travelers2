@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.al4apps.travelers2.core.ui.asString
+import com.al4apps.travelers2.core.ui.getString
 import com.al4apps.travelers2.design_system.dock.DockBar
 import com.al4apps.travelers2.features.home.HomeChild
 import com.al4apps.travelers2.features.home.HomeComponent
@@ -59,7 +59,7 @@ fun HomeScreen(
         ) {
             ScreenContent(
                 title = "Home",
-                message = errorMessage.asString(),
+                message = errorMessage.getString(),
                 buttonLabel = "Retry",
                 onButtonClick = component::onRetryClick,
             )

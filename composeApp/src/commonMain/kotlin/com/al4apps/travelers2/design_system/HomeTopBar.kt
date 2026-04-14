@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.al4apps.travelers2.core.ui.UiText
-import com.al4apps.travelers2.core.ui.asString
+import com.al4apps.travelers2.core.ui.getString
 import com.al4apps.travelers2.shared_model.HomeTopBarUiState
 import com.al4apps.travelers2.theme.AppTheme
 import org.jetbrains.compose.resources.DrawableResource
@@ -43,7 +43,7 @@ fun HomeTopBar(
         modifier = modifier.fillMaxWidth(),
         title = {
             Text(
-                text = state.title.asString(),
+                text = state.title.getString(),
                 style = AppTheme.typography.h2,
                 color = AppTheme.colors.text.primary
             )

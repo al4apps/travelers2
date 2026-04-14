@@ -16,7 +16,7 @@ sealed interface UiText {
 }
 
 @Composable
-fun UiText.asString(): String =
+fun UiText.getString(): String =
     when (this) {
         is UiText.Plain -> {
             value

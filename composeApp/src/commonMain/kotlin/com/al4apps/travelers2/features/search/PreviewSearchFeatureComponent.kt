@@ -1,6 +1,6 @@
 package com.al4apps.travelers2.features.search
 
-import com.al4apps.travelers2.features.search_trips.PreviewSearchFormComponent
+import com.al4apps.travelers2.features.search_form.PreviewSearchFormComponent
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value

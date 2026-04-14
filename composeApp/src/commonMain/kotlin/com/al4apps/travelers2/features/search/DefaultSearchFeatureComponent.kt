@@ -6,7 +6,7 @@ import com.al4apps.travelers2.core.CoroutineFeature
 import com.al4apps.travelers2.core.CoroutineFeatureImpl
 import com.al4apps.travelers2.features.search.model.SearchQuery
 import com.al4apps.travelers2.features.search_results.DefaultSearchResultsComponent
-import com.al4apps.travelers2.features.search_trips.DefaultSearchFormComponent
+import com.al4apps.travelers2.features.search_form.DefaultSearchFormComponent
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation

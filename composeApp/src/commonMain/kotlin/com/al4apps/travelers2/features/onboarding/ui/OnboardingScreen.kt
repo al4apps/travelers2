@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.al4apps.travelers2.core.ui.asString
+import com.al4apps.travelers2.core.ui.getString
 import com.al4apps.travelers2.features.onboarding.OnboardingComponent
 import com.al4apps.travelers2.features.onboarding.PreviewOnboardingComponent
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
@@ -42,17 +42,17 @@ fun OnboardingScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(
-                text = uiState.title.asString(),
+                text = uiState.title.getString(),
                 style = MaterialTheme.typography.headlineMedium,
                 textAlign = TextAlign.Center,
             )
             Text(
-                text = uiState.message.asString(),
+                text = uiState.message.getString(),
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
             )
             Button(onClick = component::onContinueClick) {
-                Text(uiState.buttonLabel.asString())
+                Text(uiState.buttonLabel.getString())
             }
         }
     }

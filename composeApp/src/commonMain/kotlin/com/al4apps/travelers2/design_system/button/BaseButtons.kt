@@ -12,6 +12,8 @@ import androidx.compose.material3.TextButton as MaterialTextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.al4apps.travelers2.core.ui.getString
+import com.al4apps.travelers2.shared_model.ButtonUiState
 import com.al4apps.travelers2.theme.AppTheme
 
 object LAppButtonStyles {
@@ -23,14 +25,13 @@ object LAppButtonStyles {
 
 @Composable
 fun PrimaryButton(
-    text: String,
-    enabled: Boolean,
+    uiState: ButtonUiState,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
-        enabled = enabled,
+        enabled = uiState.enabled,
         shape = LAppButtonStyles.shape,
         contentPadding = LAppButtonStyles.padding,
         colors = ButtonDefaults.buttonColors(
@@ -43,7 +44,7 @@ fun PrimaryButton(
             .widthIn(min = LAppButtonStyles.minWidth)
             .height(LAppButtonStyles.minHeight)
     ) {
-        Text(text = text, style = AppTheme.typography.subtitle)
+        Text(text = uiState.text.getString(), style = AppTheme.typography.subtitle)
     }
 }
 

@@ -7,7 +7,7 @@ import com.al4apps.travelers2.features.search.PreviewSearchFeatureComponent
 import com.al4apps.travelers2.features.search.SearchChild
 import com.al4apps.travelers2.features.search.SearchFeatureComponent
 import com.al4apps.travelers2.features.search_results.ui.SearchResultsScreen
-import com.al4apps.travelers2.features.search_trips.ui.SearchTripsScreen
+import com.al4apps.travelers2.features.search_form.ui.SearchTripsScreen
 import com.arkivanov.decompose.extensions.compose.stack.Children
 
 @Composable

@@ -71,8 +71,8 @@ fun SearchResultsTopBar(
 @Composable
 private fun SearchResultsTopBarUiState.routeTitleTextStyle() =
     when {
-        routeTitle.length > 38 -> AppTheme.typography.caption
-        routeTitle.length > 32 -> AppTheme.typography.body2
+        routeTitle.length > 38 -> AppTheme.typography.body2
+        routeTitle.length > 32 -> AppTheme.typography.body1
         else -> AppTheme.typography.subtitle
     }
 
