@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -18,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.al4apps.travelers2.core.model.TripAddress
 import com.al4apps.travelers2.core.model.TripDateFormatter
 import com.al4apps.travelers2.design_system.TripResultCard
 import com.al4apps.travelers2.design_system.SearchResultsTopBar
@@ -39,13 +41,13 @@ import travelers2.composeapp.generated.resources.search_results_tab_cars
 @Composable
 fun SearchResultsScreen(
     component: SearchResultsComponent,
-    modifier: Modifier = Modifier,
+    bottomSpacer: @Composable () -> Unit = {},
 ) {
     var selectedTabId by remember { mutableLongStateOf(Tab.ALL.id) }
 
     val from = component.query.fromAddress.toRoutePoint()
     val to = component.query.toAddress.toRoutePoint()
-    val routeTitle = "$from -- $to"
+    val routeTitle = "$from -> $to"
     val date = component.query.tripDate?.let(TripDateFormatter::toDisplayString).orEmpty()
     val passengers = stringResource(Res.string.search_results_passenger_one)
     val subtitle = if (date.isEmpty()) {
@@ -76,7 +78,7 @@ fun SearchResultsScreen(
     }
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .safeDrawingPadding(),
     ) {
@@ -98,18 +100,19 @@ fun SearchResultsScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 8.dp),
+                .padding(top = 4.dp),
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                items(
+                itemsIndexed(
                     items = tripCards,
-                    key = { item -> item.id },
-                ) { item ->
+                    key = { _: Int, item: SearchResultTripUiModel -> item.id },
+                ) { i: Int, item: SearchResultTripUiModel ->
                     TripResultCard(model = item)
+                    if (i == tripCards.lastIndex) bottomSpacer()
                 }
             }
         }
@@ -122,7 +125,7 @@ private enum class Tab(val id: Long) {
     BUSES(3L),
 }
 
-private fun com.al4apps.travelers2.core.model.TripAddress?.toRoutePoint(): String {
+private fun TripAddress?.toRoutePoint(): String {
     val town = this?.town.orEmpty()
     val locality = this?.locality?.takeIf { it.isNotBlank() } ?: return town
     return "$town ($locality)"

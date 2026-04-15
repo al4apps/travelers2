@@ -6,22 +6,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.al4apps.travelers2.features.search.PreviewSearchFeatureComponent
 import com.al4apps.travelers2.features.search.SearchChild
 import com.al4apps.travelers2.features.search.SearchFeatureComponent
-import com.al4apps.travelers2.features.search_results.ui.SearchResultsScreen
 import com.al4apps.travelers2.features.search_form.ui.SearchTripsScreen
+import com.al4apps.travelers2.features.search_results.ui.SearchResultsScreen
 import com.arkivanov.decompose.extensions.compose.stack.Children
 
 @Composable
 fun SearchScreen(
     component: SearchFeatureComponent,
-    modifier: Modifier = Modifier,
+    bottomSpacer: @Composable () -> Unit = {},
 ) {
     Children(
         stack = component.stack,
-        modifier = modifier,
+        modifier = Modifier,
     ) { child ->
         when (val instance = child.instance) {
             is SearchChild.Form -> SearchTripsScreen(component = instance.component)
-            is SearchChild.Results -> SearchResultsScreen(component = instance.component)
+            is SearchChild.Results -> SearchResultsScreen(
+                component = instance.component,
+                bottomSpacer
+            )
         }
     }
 }

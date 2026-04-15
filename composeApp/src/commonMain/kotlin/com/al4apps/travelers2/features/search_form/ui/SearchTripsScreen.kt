@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.al4apps.travelers2.core.ui.UiText
 import com.al4apps.travelers2.core.ui.getString
@@ -40,13 +41,13 @@ import travelers2.composeapp.generated.resources.pin
 @Composable
 fun SearchTripsScreen(
     component: SearchFormComponent,
-    modifier: Modifier = Modifier,
+    bottomSpacer: @Composable () -> Unit = {},
 ) {
     val uiState by component.uiState.subscribeAsState()
 
     Children(
         stack = component.stack,
-        modifier = modifier,
+        modifier = Modifier,
     ) { child ->
         when (val instance = child.instance) {
             SearchTripsChild.Form -> SearchTripsCardContent {
@@ -72,7 +73,7 @@ fun SearchTripsScreen(
 
             is SearchTripsChild.AddressSearch -> AddressSearchScreen(
                 component = instance.component,
-                modifier = modifier,
+                modifier = Modifier,
             )
         }
     }
