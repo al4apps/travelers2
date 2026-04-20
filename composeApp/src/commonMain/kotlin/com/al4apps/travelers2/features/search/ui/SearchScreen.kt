@@ -23,7 +23,7 @@ fun SearchScreen(
             is SearchChild.Form -> SearchTripsScreen(component = instance.component)
             is SearchChild.Results -> SearchResultsScreen(
                 component = instance.component,
-                bottomSpacer
+                bottomSpacer = bottomSpacer
             )
         }
     }
