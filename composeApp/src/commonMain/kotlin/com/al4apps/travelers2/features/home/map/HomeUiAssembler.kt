@@ -9,6 +9,7 @@ class HomeUiAssembler {
     fun assemble(vmState: HomeVmState): HomeUiState =
         HomeUiState(
             isLoading = vmState.isLoading,
+            isDockVisible = vmState.isDockVisible,
             errorMessage = vmState.errorMessage?.let(UiText::Plain),
         )
 }

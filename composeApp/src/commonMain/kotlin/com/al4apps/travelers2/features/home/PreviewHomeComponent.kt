@@ -13,6 +13,7 @@ class PreviewHomeComponent : HomeComponent {
         MutableValue(
             HomeUiState(
                 isLoading = false,
+                isDockVisible = true,
             ),
         )
 

@@ -1,5 +1,11 @@
 package com.al4apps.travelers2.features.home.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -73,37 +79,41 @@ fun HomeScreen(
         else -> Column(
             modifier = modifier
                 .fillMaxSize()
-                .safeDrawingPadding()
-                .padding(vertical = 16.dp),
+                .safeDrawingPadding(),
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .navigationBarsPadding(),
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                ) {
-                    Children(stack = stack) { child ->
-                        when (val instance = child.instance) {
-                            is HomeChild.SearchTrips -> SearchScreen(
-                                component = instance.component,
-                                bottomSpacer = { Spacer(modifier = Modifier.height(bottomSpace)) }
-                            )
 
-                            is HomeChild.CreateTrip -> CreateTripScreen(component = instance.component)
-                            is HomeChild.Profile -> ProfileScreen(component = instance.component)
-                        }
+                Children(stack = stack) { child ->
+                    when (val instance = child.instance) {
+                        is HomeChild.SearchTrips -> SearchScreen(
+                            component = instance.component,
+                            bottomSpacer = { Spacer(modifier = Modifier.height(bottomSpace)) }
+                        )
+
+                        is HomeChild.CreateTrip -> CreateTripScreen(component = instance.component)
+                        is HomeChild.Profile -> ProfileScreen(component = instance.component)
                     }
                 }
-                DockBar(
-                    items = component.getDockItems(),
-                    modifier = Modifier
-                        .height(dockBarHeight)
-                        .align(Alignment.BottomCenter),
-                    onItemClick = component::onDockItemClick,
-                )
+                this@Column.AnimatedVisibility(
+                    visible = uiState.isDockVisible,
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    enter = slideInVertically(tween(220), initialOffsetY = { y -> y })
+                            + fadeIn(tween(180)),
+                    exit = slideOutVertically(tween(200), targetOffsetY = { y -> y })
+                            + fadeOut(tween(160))
+                ) {
+                    DockBar(
+                        items = component.getDockItems(),
+                        modifier = Modifier
+                            .height(dockBarHeight)
+                            .align(Alignment.BottomCenter),
+                        onItemClick = component::onDockItemClick,
+                    )
+                }
             }
         }
     }

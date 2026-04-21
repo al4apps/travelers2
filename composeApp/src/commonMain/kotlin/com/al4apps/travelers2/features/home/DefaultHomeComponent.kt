@@ -114,18 +114,34 @@ class DefaultHomeComponent(
         componentContext: ComponentContext,
     ): HomeChild =
         when (config) {
-            HomeConfig.SearchTrips -> HomeChild.SearchTrips(
-                component = DefaultSearchFeatureComponent(componentContext = componentContext),
-            )
+            HomeConfig.SearchTrips -> {
+                val component = DefaultSearchFeatureComponent(
+                    componentContext = componentContext,
+                    updateDockVisibility = ::updateDockVisibility
+                )
+                HomeChild.SearchTrips(
+                    component = component,
+                )
+            }
 
-            HomeConfig.CreateTrip -> HomeChild.CreateTrip(
-                component = DefaultCreateTripComponent(componentContext = componentContext),
-            )
+            HomeConfig.CreateTrip -> {
+                HomeChild.CreateTrip(
+                    component = DefaultCreateTripComponent(componentContext = componentContext),
+                )
+            }
 
-            HomeConfig.Profile -> HomeChild.Profile(
-                component = DefaultProfileComponent(componentContext = componentContext),
-            )
+            HomeConfig.Profile -> {
+                HomeChild.Profile(
+                    component = DefaultProfileComponent(componentContext = componentContext),
+                )
+            }
         }
+
+    private fun updateDockVisibility(isVisible: Boolean) {
+        vmStateStore.updateState { state ->
+            state.copy(isDockVisible = isVisible)
+        }
+    }
 
     private companion object {
         const val STATE_KEY = "home_vm_state"

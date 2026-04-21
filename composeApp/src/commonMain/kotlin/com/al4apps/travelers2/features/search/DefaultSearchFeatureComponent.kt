@@ -1,23 +1,26 @@
 package com.al4apps.travelers2.features.search
 
-import com.al4apps.travelers2.core.model.TripAddress
-import com.al4apps.travelers2.core.model.TripDate
 import com.al4apps.travelers2.core.CoroutineFeature
 import com.al4apps.travelers2.core.CoroutineFeatureImpl
+import com.al4apps.travelers2.core.model.TripAddress
+import com.al4apps.travelers2.core.model.TripDate
 import com.al4apps.travelers2.features.search.model.SearchQuery
-import com.al4apps.travelers2.features.search_results.DefaultSearchResultsComponent
 import com.al4apps.travelers2.features.search_form.DefaultSearchFormComponent
+import com.al4apps.travelers2.features.search_results.DefaultSearchResultsComponent
 import com.al4apps.travelers2.features.trip_details.DefaultTripDetailsComponent
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.lifecycle.doOnDestroy
 
 class DefaultSearchFeatureComponent(
     componentContext: ComponentContext,
+    private val updateDockVisibility: (isVisible: Boolean) -> Unit,
 ) : SearchFeatureComponent,
     ComponentContext by componentContext,
     CoroutineFeature by CoroutineFeatureImpl(componentContext) {
@@ -31,6 +34,20 @@ class DefaultSearchFeatureComponent(
         handleBackButton = true,
         childFactory = ::createChild,
     )
+
+    init {
+        subscribeStack()
+    }
+
+    @OptIn(ExperimentalDecomposeApi::class)
+    private fun subscribeStack() {
+        val cancellation = stack.subscribe { childStack ->
+            updateDockVisibility(childStack.active.configuration !is SearchConfig.TripDetails)
+        }
+        doOnDestroy {
+            cancellation.cancel()
+        }
+    }
 
     private fun createChild(
         config: SearchConfig,
