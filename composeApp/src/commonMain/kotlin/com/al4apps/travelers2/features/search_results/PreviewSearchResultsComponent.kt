@@ -49,4 +49,6 @@ class PreviewSearchResultsComponent : SearchResultsComponent {
     override fun onBackClick() = Unit
 
     override fun onTabClick(tabId: Long) = Unit
+
+    override fun onTripClick(tripId: String) = Unit
 }

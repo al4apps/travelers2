@@ -8,6 +8,7 @@ import com.al4apps.travelers2.features.search.SearchChild
 import com.al4apps.travelers2.features.search.SearchFeatureComponent
 import com.al4apps.travelers2.features.search_form.ui.SearchTripsScreen
 import com.al4apps.travelers2.features.search_results.ui.SearchResultsScreen
+import com.al4apps.travelers2.features.trip_details.ui.TripDetailsScreen
 import com.arkivanov.decompose.extensions.compose.stack.Children
 
 @Composable
@@ -24,6 +25,11 @@ fun SearchScreen(
             is SearchChild.Results -> SearchResultsScreen(
                 component = instance.component,
                 bottomSpacer = bottomSpacer
+            )
+
+            is SearchChild.TripDetails -> TripDetailsScreen(
+                component = instance.component,
+                bottomSpacer = bottomSpacer,
             )
         }
     }

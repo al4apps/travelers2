@@ -9,4 +9,6 @@ interface SearchResultsComponent {
     fun onBackClick()
 
     fun onTabClick(tabId: Long)
+
+    fun onTripClick(tripId: String)
 }

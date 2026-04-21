@@ -12,4 +12,9 @@ sealed interface SearchConfig {
     data class Results(
         val query: SearchQuery,
     ) : SearchConfig
+
+    @Serializable
+    data class TripDetails(
+        val tripId: String,
+    ) : SearchConfig
 }

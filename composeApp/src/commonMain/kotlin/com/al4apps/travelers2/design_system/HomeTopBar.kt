@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +34,7 @@ import travelers2.composeapp.generated.resources.search
 fun HomeTopBar(
     state: HomeTopBarUiState,
     modifier: Modifier = Modifier,
+    titleBlock: (@Composable () -> Unit)? = null,
     onBackClick: () -> Unit = {},
     onLeadingClick: () -> Unit = {},
     onPrimaryActionClick: () -> Unit = {},
@@ -42,11 +43,15 @@ fun HomeTopBar(
     TopAppBar(
         modifier = modifier.fillMaxWidth(),
         title = {
-            Text(
-                text = state.title.getString(),
-                style = AppTheme.typography.h2,
-                color = AppTheme.colors.text.primary
-            )
+            if (titleBlock != null) {
+                titleBlock()
+            } else {
+                Text(
+                    text = state.title.getString(),
+                    style = AppTheme.typography.subtitle,
+                    color = AppTheme.colors.text.default
+                )
+            }
         },
         navigationIcon = {
             Row(
@@ -97,7 +102,7 @@ fun HomeTopBar(
 }
 
 @Composable
-private fun HomeTopBarIcon(
+fun HomeTopBarIcon(
     icon: DrawableResource,
     isClickable: Boolean,
     onClick: () -> Unit,

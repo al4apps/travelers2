@@ -1,6 +1,7 @@
 package com.al4apps.travelers2.design_system
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,9 +35,12 @@ import travelers2.composeapp.generated.resources.pin_red
 fun TripResultCard(
     model: SearchResultTripUiModel,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     ElevatedCard(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.background.default,

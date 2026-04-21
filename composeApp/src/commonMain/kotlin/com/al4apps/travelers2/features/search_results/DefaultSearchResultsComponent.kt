@@ -18,6 +18,7 @@ class DefaultSearchResultsComponent(
     componentContext: ComponentContext,
     query: SearchQuery,
     private val onBack: () -> Unit,
+    private val onTripClick: (tripId: String) -> Unit,
     private val uiAssembler: SearchResultsUiAssembler = SearchResultsUiAssembler(),
 ) : SearchResultsComponent,
     ComponentContext by componentContext,
@@ -56,6 +57,10 @@ class DefaultSearchResultsComponent(
         vmStateStore.updateState { state ->
             state.copy(selectedTab = selectedTab)
         }
+    }
+
+    override fun onTripClick(tripId: String) {
+        onTripClick.invoke(tripId)
     }
 
     private companion object {

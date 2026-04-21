@@ -61,7 +61,10 @@ fun SearchResultsScreen(
                     items = uiState.tripCards,
                     key = { _: Int, item: SearchResultTripUiModel -> item.id },
                 ) { i: Int, item: SearchResultTripUiModel ->
-                    TripResultCard(model = item)
+                    TripResultCard(
+                        model = item,
+                        onClick = { component.onTripClick(item.id) },
+                    )
                     if (i == uiState.tripCards.lastIndex) bottomSpacer()
                 }
             }

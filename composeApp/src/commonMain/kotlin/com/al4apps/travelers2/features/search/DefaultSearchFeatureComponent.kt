@@ -7,6 +7,7 @@ import com.al4apps.travelers2.core.CoroutineFeatureImpl
 import com.al4apps.travelers2.features.search.model.SearchQuery
 import com.al4apps.travelers2.features.search_results.DefaultSearchResultsComponent
 import com.al4apps.travelers2.features.search_form.DefaultSearchFormComponent
+import com.al4apps.travelers2.features.trip_details.DefaultTripDetailsComponent
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
@@ -48,6 +49,15 @@ class DefaultSearchFeatureComponent(
                     componentContext = componentContext,
                     query = config.query,
                     onBack = { navigation.pop() },
+                    onTripClick = ::onTripClick,
+                ),
+            )
+
+            is SearchConfig.TripDetails -> SearchChild.TripDetails(
+                component = DefaultTripDetailsComponent(
+                    componentContext = componentContext,
+                    tripId = config.tripId,
+                    onBack = { navigation.pop() },
                 ),
             )
         }
@@ -65,6 +75,13 @@ class DefaultSearchFeatureComponent(
                     tripDate = tripDate,
                 ),
             ),
+        )
+    }
+
+    private fun onTripClick(tripId: String) {
+
+        navigation.pushNew(
+            SearchConfig.TripDetails(tripId = tripId),
         )
     }
 }

@@ -2,6 +2,7 @@ package com.al4apps.travelers2.features.search_results.map
 
 import com.al4apps.travelers2.core.model.TripAddress
 import com.al4apps.travelers2.core.model.TripDateFormatter
+import com.al4apps.travelers2.core.ui.UiText
 import com.al4apps.travelers2.design_system.SearchResultsTopBarUiState
 import com.al4apps.travelers2.features.search_results.model.SearchResultTripUiModel
 import com.al4apps.travelers2.features.search_results.model.SearchResultsTab
@@ -59,8 +60,8 @@ class SearchResultsUiAssembler {
 
         return SearchResultsUiState(
             topBar = SearchResultsTopBarUiState(
-                routeTitle = routeTitle,
-                subtitle = subtitle,
+                routeTitle = UiText.Plain(routeTitle),
+                subtitle = UiText.Plain(subtitle),
             ),
             tabs = tabs,
             tripCards = cards,
