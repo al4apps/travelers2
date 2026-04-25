@@ -49,6 +49,7 @@ class DefaultRootComponent(
         return DefaultHomeComponent(
             componentContext = componentContext,
             initializeHomeUseCase = homeDiContainer.initializeHomeUseCase,
+            handleDriverContactActionUseCase = homeDiContainer.handleDriverContactActionUseCase,
             uiAssembler = homeDiContainer.homeUiAssembler,
         )
     }

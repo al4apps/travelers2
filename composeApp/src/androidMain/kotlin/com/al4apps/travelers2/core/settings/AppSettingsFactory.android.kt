@@ -1,16 +1,14 @@
 package com.al4apps.travelers2.core.settings
 
-import com.al4apps.travelers2.core.platform.PlatformContext
+import android.content.Context
 import com.russhwolf.settings.SharedPreferencesSettings
 
-actual class AppSettingsFactory actual constructor(
-    private val platformContext: PlatformContext,
-) {
+actual class AppSettingsFactory(private val context: Context) {
 
     actual fun create(): AppSettings =
         AppSettingsImpl(
             settings = SharedPreferencesSettings.Factory(
-                context = platformContext.applicationContext,
+                context = context,
             ).create(name = "travelers_settings"),
         )
 }

@@ -22,6 +22,11 @@
     <string name="trip_details_seats_left">Осталось %1$d места</string>
     <string name="trip_details_price_title">Стоимость места</string>
     <string name="trip_details_book">Забронировать</string>
+    <string name="trip_details_contact_dialog_title">Связаться с водителем</string>
+    <string name="trip_details_contact_dialog_subtitle">Выберите удобный способ связи с %1$s для подтверждения деталей поездки.</string>
+    <string name="trip_details_contact_dialog_phone">Позвонить по телефону</string>
+    <string name="trip_details_contact_dialog_whatsapp">Написать в WhatsApp</string>
+    <string name="trip_details_contact_dialog_telegram">Написать в Telegram</string>
     <string name="calendar_weekday_mon">Пн</string>
     <string name="calendar_weekday_tue">Вт</string>
     <string name="calendar_weekday_wed">Ср</string>

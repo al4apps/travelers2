@@ -7,6 +7,7 @@ import com.al4apps.travelers2.core.model.TripDate
 import com.al4apps.travelers2.features.search.model.SearchQuery
 import com.al4apps.travelers2.features.search_form.DefaultSearchFormComponent
 import com.al4apps.travelers2.features.search_results.DefaultSearchResultsComponent
+import com.al4apps.travelers2.features.trip_details.domain.usecase.HandleDriverContactActionUseCase
 import com.al4apps.travelers2.features.trip_details.DefaultTripDetailsComponent
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
@@ -21,6 +22,7 @@ import com.arkivanov.essenty.lifecycle.doOnDestroy
 class DefaultSearchFeatureComponent(
     componentContext: ComponentContext,
     private val updateDockVisibility: (isVisible: Boolean) -> Unit,
+    private val handleDriverContactActionUseCase: HandleDriverContactActionUseCase,
 ) : SearchFeatureComponent,
     ComponentContext by componentContext,
     CoroutineFeature by CoroutineFeatureImpl(componentContext) {
@@ -75,6 +77,7 @@ class DefaultSearchFeatureComponent(
                     componentContext = componentContext,
                     tripId = config.tripId,
                     onBack = { navigation.pop() },
+                    handleDriverContactActionUseCase = handleDriverContactActionUseCase,
                 ),
             )
         }

@@ -3,11 +3,13 @@ package com.al4apps.travelers2.features.trip_details
 import com.al4apps.travelers2.features.trip_details.map.TripDetailsUiAssembler
 import com.al4apps.travelers2.features.trip_details.model.TripCarVmModel
 import com.al4apps.travelers2.features.trip_details.model.TripDriverVmModel
+import com.al4apps.travelers2.features.trip_details.model.TripDriverContact
 import com.al4apps.travelers2.features.trip_details.model.TripPointVmModel
 import com.al4apps.travelers2.features.trip_details.model.TripDetailsUiState
 import com.al4apps.travelers2.features.trip_details.model.TripDetailsVmState
 import com.al4apps.travelers2.features.trip_details.model.TripSeatType
 import com.al4apps.travelers2.features.trip_details.model.TripSeatVmModel
+import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
@@ -21,6 +23,11 @@ class PreviewTripDetailsComponent : TripDetailsComponent {
                     driver = TripDriverVmModel(
                         name = "Искандар",
                         completedTripsCount = 150,
+                    ),
+                    driverContact = TripDriverContact(
+                        phoneNumber = "+992900001122",
+                        whatsappPhoneNumber = "+992900001122",
+                        telegramUsername = "iskandar_driver",
                     ),
                     departurePoint = TripPointVmModel(
                         time = "09:00",
@@ -50,6 +57,9 @@ class PreviewTripDetailsComponent : TripDetailsComponent {
                 ),
             ),
         )
+
+    override val dialogSlot: Value<ChildSlot<TripDetailsDialogConfig, TripDetailsDialogChild>> =
+        MutableValue(ChildSlot())
 
     override fun onBackClick() = Unit
 

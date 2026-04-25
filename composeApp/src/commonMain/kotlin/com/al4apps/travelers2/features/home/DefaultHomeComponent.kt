@@ -11,6 +11,7 @@ import com.al4apps.travelers2.features.home.model.HomeUiState
 import com.al4apps.travelers2.features.home.model.HomeVmState
 import com.al4apps.travelers2.features.profile.DefaultProfileComponent
 import com.al4apps.travelers2.features.search.DefaultSearchFeatureComponent
+import com.al4apps.travelers2.features.trip_details.domain.usecase.HandleDriverContactActionUseCase
 import com.al4apps.travelers2.shared_model.DockItem
 import com.al4apps.travelers2.shared_model.DockItemUiState
 import com.arkivanov.decompose.ComponentContext
@@ -24,6 +25,7 @@ import kotlinx.coroutines.launch
 class DefaultHomeComponent(
     componentContext: ComponentContext,
     private val initializeHomeUseCase: InitializeHomeUseCase,
+    private val handleDriverContactActionUseCase: HandleDriverContactActionUseCase,
     private val uiAssembler: HomeUiAssembler = HomeUiAssembler(),
 ) : HomeComponent,
     ComponentContext by componentContext,
@@ -117,7 +119,8 @@ class DefaultHomeComponent(
             HomeConfig.SearchTrips -> {
                 val component = DefaultSearchFeatureComponent(
                     componentContext = componentContext,
-                    updateDockVisibility = ::updateDockVisibility
+                    updateDockVisibility = ::updateDockVisibility,
+                    handleDriverContactActionUseCase = handleDriverContactActionUseCase,
                 )
                 HomeChild.SearchTrips(
                     component = component,

@@ -7,6 +7,7 @@ data class TripDetailsVmState(
     val tripId: String,
     val tripDateText: String,
     val driver: TripDriverVmModel,
+    val driverContact: TripDriverContact,
     val departurePoint: TripPointVmModel,
     val arrivalPoint: TripPointVmModel,
     val car: TripCarVmModel,

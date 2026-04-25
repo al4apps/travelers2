@@ -27,6 +27,8 @@ import com.al4apps.travelers2.design_system.trip_details.TripDetailsSeatsCard
 import com.al4apps.travelers2.design_system.trip_details.TripDetailsVehicleCard
 import com.al4apps.travelers2.features.trip_details.PreviewTripDetailsComponent
 import com.al4apps.travelers2.features.trip_details.TripDetailsComponent
+import com.al4apps.travelers2.features.trip_details.TripDetailsDialogChild
+import com.al4apps.travelers2.features.trip_details.contact_dialog.ui.DriverContactDialog
 import com.al4apps.travelers2.features.trip_details.model.TripDetailsSeatUiModel
 import com.al4apps.travelers2.features.trip_details.model.TripSeatType
 import com.al4apps.travelers2.theme.AppTheme
@@ -42,6 +44,7 @@ fun TripDetailsScreen(
     bottomSpacer: @Composable () -> Unit = {},
 ) {
     val uiState by component.uiState.subscribeAsState()
+    val dialogSlot by component.dialogSlot.subscribeAsState()
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -115,6 +118,14 @@ fun TripDetailsScreen(
                 buttonTitle = uiState.bookingButtonTitle.getString(),
                 onBookClick = component::onBookClick,
             )
+
+            when (val dialogChild = dialogSlot.child?.instance) {
+                is TripDetailsDialogChild.DriverContact -> {
+                    DriverContactDialog(component = dialogChild.component)
+                }
+
+                null -> Unit
+            }
         }
     }
 }
