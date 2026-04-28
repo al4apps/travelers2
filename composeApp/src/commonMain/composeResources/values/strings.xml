@@ -34,4 +34,56 @@
     <string name="calendar_weekday_fri">Пт</string>
     <string name="calendar_weekday_sat">Сб</string>
     <string name="calendar_weekday_sun">Вс</string>
+
+    <string name="create_trip_route_title">Создать поездку</string>
+    <string name="create_trip_continue">Далее</string>
+    <string name="create_trip_recent_title">Недавние поездки</string>
+    <string name="create_trip_recent_repeat">Повторить</string>
+    <string name="create_trip_recent_empty">Здесь появятся ваши прошлые поездки.</string>
+    <string name="create_trip_recent_status_moderation">На модерации</string>
+    <string name="create_trip_recent_status_published">Опубликована</string>
+
+    <string name="create_trip_time_title">Когда вы едете?</string>
+    <string name="create_trip_time_subtitle">Укажите время и детали поездки</string>
+    <string name="create_trip_time_departure">Время выезда</string>
+    <string name="create_trip_time_departure_placeholder">--:--</string>
+    <string name="create_trip_time_duration">Длительность поездки</string>
+    <string name="create_trip_time_duration_optional">опционально</string>
+    <string name="create_trip_time_duration_hours">Часы</string>
+    <string name="create_trip_time_duration_minutes">Минуты</string>
+    <string name="create_trip_time_arrival">Прибытие: %1$s</string>
+    <string name="create_trip_time_arrival_unknown">Прибытие: укажите время</string>
+    <string name="create_trip_time_meeting">Место встречи</string>
+    <string name="create_trip_time_meeting_placeholder">Например: автовокзал, рынок</string>
+    <string name="create_trip_time_unit_hours">%1$d ч</string>
+    <string name="create_trip_time_unit_minutes">%1$d м</string>
+    <string name="create_trip_time_picker_title">Время выезда</string>
+    <string name="create_trip_time_picker_confirm">Готово</string>
+
+    <string name="create_trip_vehicle_title">Детали поездки</string>
+    <string name="create_trip_vehicle_section">Автомобиль</string>
+    <string name="create_trip_vehicle_seats_title">Свободные места</string>
+    <string name="create_trip_vehicle_seats_subtitle">Сколько пассажиров возьмёте?</string>
+    <string name="create_trip_vehicle_seats_unit">%1$d мест</string>
+    <string name="create_trip_vehicle_price_title">Цена за 1 место</string>
+    <string name="create_trip_vehicle_price_currency">%1$d сом</string>
+    <string name="create_trip_vehicle_price_currency_short">сом</string>
+    <string name="create_trip_vehicle_price_hint">Средняя цена: 180–250 сом</string>
+    <string name="create_trip_vehicle_price_placeholder">Укажите цену</string>
+    <string name="create_trip_vehicle_extras">Дополнительно</string>
+    <string name="create_trip_vehicle_baggage">Багаж разрешён</string>
+    <string name="create_trip_vehicle_parcel">Можно передать посылки</string>
+
+    <string name="create_trip_confirm_title">Проверьте поездку</string>
+    <string name="create_trip_confirm_driver_label">Водитель</string>
+    <string name="create_trip_confirm_route_label">Маршрут</string>
+    <string name="create_trip_confirm_vehicle_label">Автомобиль</string>
+    <string name="create_trip_confirm_conditions_label">Условия</string>
+    <string name="create_trip_confirm_seats_value">Свободно %1$d мест</string>
+    <string name="create_trip_confirm_price_value">Цена %1$d сом</string>
+    <string name="create_trip_confirm_baggage">Багаж</string>
+    <string name="create_trip_confirm_parcel">Посылки</string>
+    <string name="create_trip_confirm_publish">Опубликовать</string>
+    <string name="create_trip_confirm_hint">Поездка отправится на проверку. Обычно это занимает до 10 минут — мы сообщим, когда она будет опубликована.</string>
+    <string name="create_trip_confirm_published_message">Поездка отправлена на проверку</string>
 </resources>

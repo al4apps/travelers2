@@ -50,6 +50,7 @@ class DefaultRootComponent(
             componentContext = componentContext,
             initializeHomeUseCase = homeDiContainer.initializeHomeUseCase,
             handleDriverContactActionUseCase = homeDiContainer.handleDriverContactActionUseCase,
+            createTripDiContainerFactory = homeDiContainer::createCreateTripDiContainer,
             uiAssembler = homeDiContainer.homeUiAssembler,
         )
     }
