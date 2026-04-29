@@ -2,8 +2,7 @@ package com.al4apps.travelers2.features.search_form.address_search.map
 
 import com.al4apps.travelers2.core.model.TripAddress
 import com.al4apps.travelers2.core.model.matchesQuery
-import com.al4apps.travelers2.features.search_form.SearchTripsAddressField
-import com.al4apps.travelers2.features.search_form.toUiText
+import com.al4apps.travelers2.core.ui.UiText
 import com.al4apps.travelers2.features.search_form.address_search.model.AddressSearchUiState
 import com.al4apps.travelers2.features.search_form.address_search.model.AddressSearchVmState
 
@@ -11,7 +10,8 @@ class AddressSearchUiAssembler {
 
     fun assemble(
         vmState: AddressSearchVmState,
-        field: SearchTripsAddressField,
+        title: UiText,
+        placeholder: UiText,
         addresses: List<TripAddress>,
     ): AddressSearchUiState {
         val query = vmState.query.trim()
@@ -24,8 +24,8 @@ class AddressSearchUiAssembler {
         }
 
         return AddressSearchUiState(
-            title = field.toUiText(),
-            placeholder = field.toUiText(),
+            title = title,
+            placeholder = placeholder,
             query = vmState.query,
             results = filteredAddresses,
         )

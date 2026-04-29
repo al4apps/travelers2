@@ -4,6 +4,7 @@ import com.al4apps.travelers2.core.CoroutineFeature
 import com.al4apps.travelers2.core.CoroutineFeatureImpl
 import com.al4apps.travelers2.core.StateStore
 import com.al4apps.travelers2.core.toUiState
+import com.al4apps.travelers2.di.CreateTripDiContainer
 import com.al4apps.travelers2.features.create_trip.DefaultCreateTripComponent
 import com.al4apps.travelers2.features.home.domain.usecase.InitializeHomeUseCase
 import com.al4apps.travelers2.features.home.map.HomeUiAssembler
@@ -26,6 +27,7 @@ class DefaultHomeComponent(
     componentContext: ComponentContext,
     private val initializeHomeUseCase: InitializeHomeUseCase,
     private val handleDriverContactActionUseCase: HandleDriverContactActionUseCase,
+    private val createTripDiContainerFactory: () -> CreateTripDiContainer,
     private val uiAssembler: HomeUiAssembler = HomeUiAssembler(),
 ) : HomeComponent,
     ComponentContext by componentContext,
@@ -128,8 +130,16 @@ class DefaultHomeComponent(
             }
 
             HomeConfig.CreateTrip -> {
+                val createTripDiContainer = createTripDiContainerFactory()
                 HomeChild.CreateTrip(
-                    component = DefaultCreateTripComponent(componentContext = componentContext),
+                    component = DefaultCreateTripComponent(
+                        componentContext = componentContext,
+                        observeRecentTripsUseCase = createTripDiContainer.observeRecentTripsUseCase,
+                        getUserVehiclesUseCase = createTripDiContainer.getUserVehiclesUseCase,
+                        publishTripUseCase = createTripDiContainer.publishTripUseCase,
+                        observeAuthStateUseCase = createTripDiContainer.observeAuthStateUseCase,
+                        updateDockVisibility = ::updateDockVisibility,
+                    ),
                 )
             }
 

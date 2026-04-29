@@ -74,7 +74,8 @@ class DefaultSearchFormComponent(
             is SearchTripsConfig.AddressSearch -> SearchTripsChild.AddressSearch(
                 component = DefaultAddressSearchComponent(
                     componentContext = componentContext,
-                    field = config.field,
+                    title = config.field.toUiText(),
+                    placeholder = config.field.toUiText(),
                     initialQuery = config.field.extractValue(vmStateStore.value),
                     addresses = AddressSearchCatalog.addresses,
                     onBackClick = ::closeAddressSearch,

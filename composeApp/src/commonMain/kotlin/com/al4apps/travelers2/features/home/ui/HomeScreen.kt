@@ -94,7 +94,10 @@ fun HomeScreen(
                             bottomSpacer = { Spacer(modifier = Modifier.height(bottomSpace)) }
                         )
 
-                        is HomeChild.CreateTrip -> CreateTripScreen(component = instance.component)
+                        is HomeChild.CreateTrip -> CreateTripScreen(
+                            component = instance.component,
+                            bottomSpacer = { Spacer(modifier = Modifier.height(bottomSpace)) },
+                        )
                         is HomeChild.Profile -> ProfileScreen(component = instance.component)
                     }
                 }
