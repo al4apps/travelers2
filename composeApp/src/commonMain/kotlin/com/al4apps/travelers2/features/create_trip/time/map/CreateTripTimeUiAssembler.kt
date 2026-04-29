@@ -21,12 +21,13 @@ import travelers2.composeapp.generated.resources.create_trip_time_meeting
 import travelers2.composeapp.generated.resources.create_trip_time_meeting_placeholder
 import travelers2.composeapp.generated.resources.create_trip_time_subtitle
 import travelers2.composeapp.generated.resources.create_trip_time_title
+import travelers2.composeapp.generated.resources.create_trip_time_topbar_title
 import travelers2.composeapp.generated.resources.ic_arrow_back
 
 class CreateTripTimeUiAssembler {
 
     fun assemble(vmState: CreateTripTimeVmState): CreateTripTimeUiState {
-        val isValid = vmState.departureTime != null && vmState.meetingPoint.isNotBlank()
+        val isValid = vmState.departureTime != null
 
         val arrivalText = if (vmState.departureTime != null && !vmState.duration.isZero) {
             val arrival = vmState.duration.applyTo(vmState.departureTime)
@@ -45,7 +46,7 @@ class CreateTripTimeUiAssembler {
 
         return CreateTripTimeUiState(
             topBarState = HomeTopBarUiState(
-                title = UiText.Resource(Res.string.create_trip_time_title),
+                title = UiText.Resource(Res.string.create_trip_time_topbar_title),
                 isBackVisible = true,
                 backIcon = Res.drawable.ic_arrow_back,
                 isBackClickable = true,

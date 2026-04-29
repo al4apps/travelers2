@@ -17,13 +17,18 @@ class DefaultCreateTripVehicleComponent(
     componentContext: ComponentContext,
     initialDraft: CreateTripDraft,
     private val getUserVehiclesUseCase: GetUserVehiclesUseCase,
-    private val onCommitVehicle: (
-        vehicleId: String,
-        freeSeatsCount: Int,
-        pricePerSeat: Int,
+    /**
+     * Mirrors current UI slice into the parent draft on every mutation so back/forward
+     * navigation does not lose progress.
+     */
+    private val onSliceChanged: (
+        vehicleId: String?,
+        freeSeatsCount: Int?,
+        pricePerSeat: Int?,
         baggageAllowed: Boolean,
         parcelDeliveryAllowed: Boolean,
     ) -> Unit,
+    private val onCommitVehicle: () -> Unit,
     private val onBack: () -> Unit,
     private val uiAssembler: CreateTripVehicleUiAssembler = CreateTripVehicleUiAssembler(),
 ) : CreateTripVehicleComponent,
@@ -59,53 +64,62 @@ class DefaultCreateTripVehicleComponent(
     }
 
     override fun onBackClick() {
+        propagateSlice()
         onBack.invoke()
     }
 
     override fun onVehicleSelected(vehicleId: String) {
-        vmStateStore.updateState { it.copy(selectedVehicleId = vehicleId) }
+        mutate { state ->
+            val newSelected = state.vehicles.firstOrNull { it.id == vehicleId }
+            val newSeats = newSelected?.let { it.totalSeats - 1 }
+            state.copy(
+                selectedVehicleId = vehicleId,
+                freeSeatsCount = newSeats,
+            )
+        }
     }
 
     override fun onIncrementSeats() {
-        vmStateStore.updateState {
-            if (it.freeSeatsCount >= CreateTripDraft.MAX_FREE_SEATS) it
-            else it.copy(freeSeatsCount = it.freeSeatsCount + 1)
+        mutate { state ->
+            val selected = state.vehicles.firstOrNull { it.id == state.selectedVehicleId }
+            val max = selected?.let { it.totalSeats - 1 } ?: return@mutate state
+            val current = state.freeSeatsCount ?: max
+            if (current >= max) state
+            else state.copy(freeSeatsCount = current + 1)
         }
     }
 
     override fun onDecrementSeats() {
-        vmStateStore.updateState {
-            if (it.freeSeatsCount <= CreateTripDraft.MIN_FREE_SEATS) it
-            else it.copy(freeSeatsCount = it.freeSeatsCount - 1)
+        mutate { state ->
+            val current = state.freeSeatsCount ?: return@mutate state
+            if (current <= CreateTripDraft.MIN_FREE_SEATS) state
+            else state.copy(freeSeatsCount = current - 1)
         }
     }
 
     override fun onPriceChange(value: String) {
         val sanitized = value.filter { it.isDigit() }.take(MAX_PRICE_LENGTH)
-        vmStateStore.updateState { it.copy(priceInput = sanitized) }
+        mutate { it.copy(priceInput = sanitized) }
     }
 
     override fun onBaggageToggle(value: Boolean) {
-        vmStateStore.updateState { it.copy(baggageAllowed = value) }
+        mutate { it.copy(baggageAllowed = value) }
     }
 
     override fun onParcelToggle(value: Boolean) {
-        vmStateStore.updateState { it.copy(parcelDeliveryAllowed = value) }
+        mutate { it.copy(parcelDeliveryAllowed = value) }
     }
 
     override fun onContinueClick() {
         val state = vmStateStore.value
-        val vehicleId = state.selectedVehicleId ?: return
+        val selected = state.vehicles.firstOrNull { it.id == state.selectedVehicleId } ?: return
+        val seats = state.freeSeatsCount ?: return
         val price = state.priceInput.toIntOrNull() ?: return
         if (price <= 0) return
-        if (state.freeSeatsCount !in CreateTripDraft.MIN_FREE_SEATS..CreateTripDraft.MAX_FREE_SEATS) return
-        onCommitVehicle(
-            vehicleId,
-            state.freeSeatsCount,
-            price,
-            state.baggageAllowed,
-            state.parcelDeliveryAllowed,
-        )
+        val maxSeats = selected.totalSeats - 1
+        if (seats !in CreateTripDraft.MIN_FREE_SEATS..maxSeats) return
+        propagateSlice()
+        onCommitVehicle()
     }
 
     override fun onRetryClick() {
@@ -118,16 +132,20 @@ class DefaultCreateTripVehicleComponent(
             runCatching { getUserVehiclesUseCase() }
                 .onSuccess { vehicles ->
                     vmStateStore.updateState { current ->
-                        val selected = current.selectedVehicleId
-                            ?.takeIf { id -> vehicles.any { it.id == id } }
-                            ?: vehicles.firstOrNull()?.id
+                        val previousId = current.selectedVehicleId
+                        val matchedById = vehicles.firstOrNull { it.id == previousId }
+                        val selected = matchedById ?: vehicles.firstOrNull()
+                        val seats = current.freeSeatsCount
+                            ?: selected?.let { it.totalSeats - 1 }
                         current.copy(
                             isLoading = false,
                             errorMessage = null,
                             vehicles = vehicles,
-                            selectedVehicleId = selected,
+                            selectedVehicleId = selected?.id,
+                            freeSeatsCount = seats,
                         )
                     }
+                    propagateSlice()
                 }
                 .onFailure { throwable ->
                     vmStateStore.updateState {
@@ -138,6 +156,22 @@ class DefaultCreateTripVehicleComponent(
                     }
                 }
         }
+    }
+
+    private fun mutate(block: (CreateTripVehicleVmState) -> CreateTripVehicleVmState) {
+        vmStateStore.updateState(block)
+        propagateSlice()
+    }
+
+    private fun propagateSlice() {
+        val state = vmStateStore.value
+        onSliceChanged(
+            state.selectedVehicleId,
+            state.freeSeatsCount,
+            state.priceInput.toIntOrNull(),
+            state.baggageAllowed,
+            state.parcelDeliveryAllowed,
+        )
     }
 
     private companion object {

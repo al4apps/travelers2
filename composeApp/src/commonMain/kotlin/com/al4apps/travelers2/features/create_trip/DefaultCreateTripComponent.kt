@@ -5,6 +5,7 @@ import com.al4apps.travelers2.core.CoroutineFeatureImpl
 import com.al4apps.travelers2.core.StateStore
 import com.al4apps.travelers2.features.create_trip.confirm.DefaultCreateTripConfirmComponent
 import com.al4apps.travelers2.features.create_trip.domain.usecase.GetUserVehiclesUseCase
+import com.al4apps.travelers2.features.create_trip.domain.usecase.ObserveAuthStateUseCase
 import com.al4apps.travelers2.features.create_trip.domain.usecase.ObserveRecentTripsUseCase
 import com.al4apps.travelers2.features.create_trip.domain.usecase.PublishTripUseCase
 import com.al4apps.travelers2.features.create_trip.model.CreateTripDraft
@@ -31,6 +32,7 @@ class DefaultCreateTripComponent(
     private val observeRecentTripsUseCase: ObserveRecentTripsUseCase,
     private val getUserVehiclesUseCase: GetUserVehiclesUseCase,
     private val publishTripUseCase: PublishTripUseCase,
+    private val observeAuthStateUseCase: ObserveAuthStateUseCase,
     private val updateDockVisibility: (isVisible: Boolean) -> Unit,
 ) : CreateTripComponent,
     ComponentContext by componentContext,
@@ -98,21 +100,13 @@ class DefaultCreateTripComponent(
                     componentContext = componentContext,
                     initialDraft = draftStore.value,
                     observeRecentTripsUseCase = observeRecentTripsUseCase,
-                    onCommitRoute = { from, to, date ->
+                    observeAuthStateUseCase = observeAuthStateUseCase,
+                    onSliceChanged = { from, to, date ->
                         draftStore.updateState {
                             it.copy(fromAddress = from, toAddress = to, tripDate = date)
                         }
-                        navigation.pushNew(CreateTripConfig.Time)
                     },
-                    onApplyRecentTrip = { trip ->
-                        draftStore.updateState {
-                            it.copy(
-                                fromAddress = trip.fromAddress,
-                                toAddress = trip.toAddress,
-                                tripDate = it.tripDate ?: trip.tripDate,
-                            )
-                        }
-                    },
+                    onCommitRoute = { navigation.pushNew(CreateTripConfig.Time) },
                 ),
             )
 
@@ -120,16 +114,16 @@ class DefaultCreateTripComponent(
                 component = DefaultCreateTripTimeComponent(
                     componentContext = componentContext,
                     initialDraft = draftStore.value,
-                    onCommitTime = { departure, duration, meetingPoint ->
+                    onSliceChanged = { departure, duration, meetingPoint ->
                         draftStore.updateState {
                             it.copy(
                                 departureTime = departure,
-                                duration = duration.takeUnless { d -> d.isZero },
+                                duration = duration,
                                 meetingPoint = meetingPoint,
                             )
                         }
-                        navigation.pushNew(CreateTripConfig.Vehicle)
                     },
+                    onCommitTime = { navigation.pushNew(CreateTripConfig.Vehicle) },
                     onBack = { navigation.pop() },
                 ),
             )
@@ -139,7 +133,7 @@ class DefaultCreateTripComponent(
                     componentContext = componentContext,
                     initialDraft = draftStore.value,
                     getUserVehiclesUseCase = getUserVehiclesUseCase,
-                    onCommitVehicle = { vehicleId, seats, price, baggage, parcel ->
+                    onSliceChanged = { vehicleId, seats, price, baggage, parcel ->
                         draftStore.updateState {
                             it.copy(
                                 selectedVehicleId = vehicleId,
@@ -149,8 +143,8 @@ class DefaultCreateTripComponent(
                                 parcelDeliveryAllowed = parcel,
                             )
                         }
-                        navigation.pushNew(CreateTripConfig.Confirm)
                     },
+                    onCommitVehicle = { navigation.pushNew(CreateTripConfig.Confirm) },
                     onBack = { navigation.pop() },
                 ),
             )

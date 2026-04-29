@@ -40,9 +40,14 @@
     <string name="create_trip_recent_title">Недавние поездки</string>
     <string name="create_trip_recent_repeat">Повторить</string>
     <string name="create_trip_recent_empty">Здесь появятся ваши прошлые поездки.</string>
+    <string name="create_trip_recent_empty_title">Безопасные поездки по всей стране</string>
+    <string name="create_trip_recent_empty_subtitle">Опубликуйте первую поездку — она появится здесь и в ленте поиска.</string>
+    <string name="create_trip_auth_required_title">Требуется авторизация</string>
+    <string name="create_trip_auth_required_subtitle">Чтобы создавать поездки, войдите в аккаунт водителя.</string>
     <string name="create_trip_recent_status_moderation">На модерации</string>
     <string name="create_trip_recent_status_published">Опубликована</string>
 
+    <string name="create_trip_time_topbar_title">Детали поездки</string>
     <string name="create_trip_time_title">Когда вы едете?</string>
     <string name="create_trip_time_subtitle">Укажите время и детали поездки</string>
     <string name="create_trip_time_departure">Время выезда</string>
@@ -76,13 +81,20 @@
 
     <string name="create_trip_confirm_title">Проверьте поездку</string>
     <string name="create_trip_confirm_driver_label">Водитель</string>
+    <string name="create_trip_confirm_datetime_label">Дата и время</string>
     <string name="create_trip_confirm_route_label">Маршрут</string>
     <string name="create_trip_confirm_vehicle_label">Автомобиль</string>
     <string name="create_trip_confirm_conditions_label">Условия</string>
-    <string name="create_trip_confirm_seats_value">Свободно %1$d мест</string>
-    <string name="create_trip_confirm_price_value">Цена %1$d сом</string>
+    <string name="create_trip_confirm_seats_label">Свободно мест</string>
+    <string name="create_trip_confirm_price_label">Цена за место</string>
+    <string name="create_trip_confirm_seats_value">%1$d %2$s</string>
+    <string name="create_trip_confirm_price_value">%1$d сом</string>
     <string name="create_trip_confirm_baggage">Багаж</string>
     <string name="create_trip_confirm_parcel">Посылки</string>
+    <string name="create_trip_confirm_yes">Разрешён</string>
+    <string name="create_trip_confirm_no">Не принимается</string>
+    <string name="create_trip_confirm_yes_short">Да</string>
+    <string name="create_trip_confirm_no_short">Нет</string>
     <string name="create_trip_confirm_publish">Опубликовать</string>
     <string name="create_trip_confirm_hint">Поездка отправится на проверку. Обычно это занимает до 10 минут — мы сообщим, когда она будет опубликована.</string>
     <string name="create_trip_confirm_published_message">Поездка отправлена на проверку</string>

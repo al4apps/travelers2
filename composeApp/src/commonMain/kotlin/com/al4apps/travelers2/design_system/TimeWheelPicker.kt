@@ -3,13 +3,13 @@ package com.al4apps.travelers2.design_system
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -20,10 +20,15 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.al4apps.travelers2.theme.AppTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
+
+private val ITEM_HEIGHT: Dp = 44.dp
+private const val VISIBLE_ITEMS = 3
 
 @Composable
 fun TimeWheelPicker(
@@ -31,19 +36,39 @@ fun TimeWheelPicker(
     initialMinute: Int,
     onValueChange: (hour: Int, minute: Int) -> Unit,
     modifier: Modifier = Modifier,
+    minuteStep: Int = 5,
 ) {
+    val hourValues = remember { (0..23).toList() }
+    val minuteValues = remember(minuteStep) {
+        (0..59 step minuteStep).toList()
+    }
+
+    val initialHourIndex = remember(initialHour, hourValues) {
+        hourValues.indexOf(initialHour).coerceAtLeast(0)
+    }
+    val initialMinuteIndex = remember(initialMinute, minuteValues) {
+        nearestIndex(minuteValues, initialMinute).coerceAtLeast(0)
+    }
+
+    val hourListState = rememberLazyListState(initialFirstVisibleItemIndex = initialHourIndex)
+    val minuteListState = rememberLazyListState(initialFirstVisibleItemIndex = initialMinuteIndex)
+
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(180.dp),
+            .height(ITEM_HEIGHT * VISIBLE_ITEMS),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Wheel(
-            range = 0..23,
-            initialValue = initialHour,
+            values = hourValues,
+            listState = hourListState,
+            onValueSelected = { newHour ->
+                val currentMinute = minuteValues.getOrNull(minuteListState.firstVisibleItemIndex)
+                    ?: minuteValues.first()
+                onValueChange(newHour, currentMinute)
+            },
             modifier = Modifier.weight(1f),
-            onValueSelected = { onValueChange(it, initialMinute) },
         )
         Text(
             text = ":",
@@ -51,51 +76,67 @@ fun TimeWheelPicker(
             color = AppTheme.colors.text.default,
         )
         Wheel(
-            range = 0..59,
-            initialValue = initialMinute,
+            values = minuteValues,
+            listState = minuteListState,
+            onValueSelected = { newMinute ->
+                val currentHour = hourValues.getOrNull(hourListState.firstVisibleItemIndex)
+                    ?: hourValues.first()
+                onValueChange(currentHour, newMinute)
+            },
             modifier = Modifier.weight(1f),
-            onValueSelected = { onValueChange(initialHour, it) },
         )
     }
 }
 
 @Composable
 private fun Wheel(
-    range: IntRange,
-    initialValue: Int,
-    modifier: Modifier,
+    values: List<Int>,
+    listState: LazyListState,
     onValueSelected: (Int) -> Unit,
+    modifier: Modifier,
 ) {
-    val itemHeight = 44.dp
-    val visibleItems = 3
-    val centerIndex = visibleItems / 2
+    val density = LocalDensity.current
+    val itemHeightPx = remember(density) { with(density) { ITEM_HEIGHT.toPx() } }
 
-    val values = remember(range) { range.toList() }
-    val initialIndex = (initialValue - range.first).coerceIn(0, values.lastIndex)
-    val listState = rememberLazyListState(initialFirstVisibleItemIndex = initialIndex)
-
-    val centeredValue: Int =
-        values.getOrNull(listState.firstVisibleItemIndex) ?: values.first()
-
-    LaunchedEffect(listState, values) {
-        snapshotFlow { listState.firstVisibleItemIndex to listState.isScrollInProgress }
+    // Snap-to-center on scroll end: when scrolling stops, animate the closest item to the center slot.
+    LaunchedEffect(listState, itemHeightPx) {
+        snapshotFlow { listState.isScrollInProgress }
             .distinctUntilChanged()
-            .collect { (index, scrolling) ->
+            .collect { scrolling ->
                 if (!scrolling) {
-                    val value = values.getOrNull(index) ?: return@collect
+                    val firstVisible = listState.firstVisibleItemIndex
+                    val offset = listState.firstVisibleItemScrollOffset.toFloat()
+                    val targetIndex = if (offset > itemHeightPx / 2f) {
+                        (firstVisible + 1).coerceAtMost(values.lastIndex)
+                    } else {
+                        firstVisible
+                    }
+                    if (targetIndex != firstVisible || offset != 0f) {
+                        listState.animateScrollToItem(targetIndex)
+                    }
+                    val value = values.getOrNull(targetIndex) ?: return@collect
                     onValueSelected(value)
                 }
             }
     }
 
+    val firstVisible = listState.firstVisibleItemIndex
+    val offset = listState.firstVisibleItemScrollOffset.toFloat()
+    val displayIndex = if (offset > itemHeightPx / 2f) {
+        (firstVisible + 1).coerceAtMost(values.lastIndex)
+    } else {
+        firstVisible
+    }
+    val centeredValue = values.getOrNull(displayIndex) ?: values.first()
+
     Box(
-        modifier = modifier.height(itemHeight * visibleItems),
+        modifier = modifier.height(ITEM_HEIGHT * VISIBLE_ITEMS),
         contentAlignment = Alignment.Center,
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(itemHeight)
+                .height(ITEM_HEIGHT)
                 .clip(RoundedCornerShape(12.dp))
                 .background(AppTheme.colors.background.gray),
         )
@@ -103,14 +144,14 @@ private fun Wheel(
             state = listState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(itemHeight * visibleItems),
-            contentPadding = PaddingValues(vertical = itemHeight * centerIndex),
+                .height(ITEM_HEIGHT * VISIBLE_ITEMS),
+            contentPadding = PaddingValues(vertical = ITEM_HEIGHT * (VISIBLE_ITEMS / 2)),
         ) {
-            items(values) { value ->
+            wheelItems(values = values) { value ->
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .size(width = 0.dp, height = itemHeight),
+                        .size(width = 0.dp, height = ITEM_HEIGHT),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
@@ -129,11 +170,24 @@ private fun Wheel(
     }
 }
 
-private inline fun androidx.compose.foundation.lazy.LazyListScope.items(
+private inline fun androidx.compose.foundation.lazy.LazyListScope.wheelItems(
     values: List<Int>,
     crossinline itemContent: @Composable (Int) -> Unit,
 ) {
     items(count = values.size) { index ->
         itemContent(values[index])
     }
+}
+
+private fun nearestIndex(values: List<Int>, target: Int): Int {
+    var bestIndex = 0
+    var bestDelta = Int.MAX_VALUE
+    values.forEachIndexed { index, value ->
+        val delta = kotlin.math.abs(value - target)
+        if (delta < bestDelta) {
+            bestDelta = delta
+            bestIndex = index
+        }
+    }
+    return bestIndex
 }

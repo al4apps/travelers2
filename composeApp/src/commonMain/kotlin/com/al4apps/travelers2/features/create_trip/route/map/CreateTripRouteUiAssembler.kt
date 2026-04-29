@@ -9,10 +9,12 @@ import com.al4apps.travelers2.features.create_trip.model.RecentTripStatus
 import com.al4apps.travelers2.features.create_trip.route.model.CreateTripRouteUiState
 import com.al4apps.travelers2.features.create_trip.route.model.CreateTripRouteVmState
 import com.al4apps.travelers2.shared_model.ButtonUiState
-import com.al4apps.travelers2.shared_model.HomeTopBarUiState
 import travelers2.composeapp.generated.resources.Res
+import travelers2.composeapp.generated.resources.create_trip_auth_required_subtitle
+import travelers2.composeapp.generated.resources.create_trip_auth_required_title
 import travelers2.composeapp.generated.resources.create_trip_continue
-import travelers2.composeapp.generated.resources.create_trip_recent_empty
+import travelers2.composeapp.generated.resources.create_trip_recent_empty_subtitle
+import travelers2.composeapp.generated.resources.create_trip_recent_empty_title
 import travelers2.composeapp.generated.resources.create_trip_recent_repeat
 import travelers2.composeapp.generated.resources.create_trip_recent_status_moderation
 import travelers2.composeapp.generated.resources.create_trip_recent_status_published
@@ -27,16 +29,18 @@ class CreateTripRouteUiAssembler {
     fun assemble(
         vmState: CreateTripRouteVmState,
         recentTrips: List<RecentTrip>,
+        isAuthenticated: Boolean,
     ): CreateTripRouteUiState {
         val isValid = vmState.fromAddress != null &&
             vmState.toAddress != null &&
             vmState.tripDate != null
 
         return CreateTripRouteUiState(
-            topBarState = HomeTopBarUiState(
-                title = UiText.Resource(Res.string.create_trip_route_title),
-                isBackVisible = false,
-            ),
+            mode = if (isAuthenticated) {
+                CreateTripRouteUiState.Mode.AUTHENTICATED
+            } else {
+                CreateTripRouteUiState.Mode.UNAUTHENTICATED
+            },
             title = UiText.Resource(Res.string.create_trip_route_title),
             fromValue = vmState.fromAddress?.toDisplayString().orEmpty(),
             toValue = vmState.toAddress?.toDisplayString().orEmpty(),
@@ -49,9 +53,12 @@ class CreateTripRouteUiAssembler {
                 enabled = isValid,
             ),
             recentSectionTitle = UiText.Resource(Res.string.create_trip_recent_title),
-            recentEmptyText = UiText.Resource(Res.string.create_trip_recent_empty),
             recentRepeatLabel = UiText.Resource(Res.string.create_trip_recent_repeat),
             recentTrips = recentTrips.map { it.toCardState() },
+            recentEmptyTitle = UiText.Resource(Res.string.create_trip_recent_empty_title),
+            recentEmptySubtitle = UiText.Resource(Res.string.create_trip_recent_empty_subtitle),
+            authPromptTitle = UiText.Resource(Res.string.create_trip_auth_required_title),
+            authPromptSubtitle = UiText.Resource(Res.string.create_trip_auth_required_subtitle),
         )
     }
 

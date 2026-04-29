@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,10 +28,10 @@ import com.al4apps.travelers2.core.ui.UiText
 import com.al4apps.travelers2.core.ui.getString
 import com.al4apps.travelers2.design_system.HomeTopBar
 import com.al4apps.travelers2.design_system.RouteTimelineCard
-import com.al4apps.travelers2.design_system.RouteTimelinePoint
 import com.al4apps.travelers2.design_system.button.PrimaryButton
 import com.al4apps.travelers2.features.create_trip.confirm.CreateTripConfirmComponent
 import com.al4apps.travelers2.features.create_trip.confirm.PreviewCreateTripConfirmComponent
+import com.al4apps.travelers2.features.create_trip.confirm.model.ConditionRow
 import com.al4apps.travelers2.theme.AppTheme
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
@@ -46,90 +47,93 @@ fun CreateTripConfirmScreen(
             state = uiState.topBarState,
             onBackClick = component::onBackClick,
         )
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                item { DriverCard(name = uiState.driverName, meta = uiState.driverMeta) }
+                item {
+                    SectionCard(label = uiState.dateTimeLabel) {
+                        DateTimeBlock(
+                            dateText = uiState.dateText,
+                            departureTime = uiState.departureTimeText,
+                            arrivalTime = uiState.arrivalTimeText,
+                        )
+                    }
+                }
+                item {
+                    SectionCard(label = uiState.routeLabel) {
+                        RouteTimelineCard(
+                            departure = uiState.departure,
+                            arrival = uiState.arrival,
+                        )
+                    }
+                }
+                item {
+                    SectionCard(label = uiState.vehicleLabel) {
+                        Text(
+                            text = uiState.vehicleModel,
+                            style = AppTheme.typography.subtitle,
+                            color = AppTheme.colors.text.default,
+                        )
+                        Text(
+                            text = uiState.vehiclePlate,
+                            style = AppTheme.typography.body2,
+                            color = AppTheme.colors.text.tertiary,
+                        )
+                    }
+                }
+                item {
+                    SectionCard(label = uiState.conditionsLabel) {
+                        ConditionsTable(rows = uiState.conditions)
+                    }
+                }
+                uiState.errorMessage?.let { error ->
+                    item {
+                        Text(
+                            text = error,
+                            style = AppTheme.typography.body2,
+                            color = AppTheme.colors.text.accent,
+                        )
+                    }
+                }
+            }
+        }
+
+        // Sticky bottom: hint + publish button.
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(AppTheme.colors.background.default)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            item { DriverCard(name = uiState.driverName, meta = uiState.driverMeta) }
-            item {
-                SectionCard(label = uiState.routeLabel) {
-                    RouteTimelineCard(
-                        departure = uiState.departure,
-                        arrival = uiState.arrival,
-                    )
-                }
-            }
-            item {
-                SectionCard(label = uiState.vehicleLabel) {
-                    Text(
-                        text = uiState.vehicleModel,
-                        style = AppTheme.typography.subtitle,
-                        color = AppTheme.colors.text.default,
-                    )
-                    Text(
-                        text = uiState.vehiclePlate,
-                        style = AppTheme.typography.body2,
-                        color = AppTheme.colors.text.tertiary,
-                    )
-                }
-            }
-            item {
-                SectionCard(label = uiState.conditionsLabel) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        InfoChip(text = uiState.seatsValue.getString(), modifier = Modifier.weight(1f))
-                        InfoChip(text = uiState.priceValue.getString(), modifier = Modifier.weight(1f))
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        if (uiState.baggageEnabled) {
-                            InfoChip(text = uiState.baggageLabel.getString(), modifier = Modifier.weight(1f))
-                        }
-                        if (uiState.parcelEnabled) {
-                            InfoChip(text = uiState.parcelLabel.getString(), modifier = Modifier.weight(1f))
-                        }
-                    }
-                }
-            }
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(AppTheme.colors.background.secondary)
-                        .padding(12.dp),
-                ) {
-                    Text(
-                        text = uiState.hint.getString(),
-                        style = AppTheme.typography.body2,
-                        color = AppTheme.colors.text.secondary,
-                    )
-                }
-            }
-            uiState.errorMessage?.let { error ->
-                item {
-                    Text(
-                        text = error,
-                        style = AppTheme.typography.body2,
-                        color = AppTheme.colors.text.accent,
-                    )
-                }
-            }
-            item {
-                PrimaryButton(
-                    uiState = uiState.publishButtonUiState,
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = component::onPublishClick,
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(AppTheme.colors.background.secondary)
+                    .padding(12.dp),
+            ) {
+                Text(
+                    text = uiState.hint.getString(),
+                    style = AppTheme.typography.body2,
+                    color = AppTheme.colors.text.secondary,
                 )
             }
-            item { bottomSpacer() }
+            PrimaryButton(
+                uiState = uiState.publishButtonUiState,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = component::onPublishClick,
+            )
+            bottomSpacer()
         }
     }
 }
@@ -177,7 +181,39 @@ private fun DriverCard(name: String, meta: String) {
 }
 
 @Composable
-private fun SectionCard(label: UiText, content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit) {
+private fun DateTimeBlock(
+    dateText: String,
+    departureTime: String,
+    arrivalTime: String?,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(
+                text = dateText,
+                style = AppTheme.typography.subtitle,
+                color = AppTheme.colors.text.default,
+            )
+            Text(
+                text = buildString {
+                    append(departureTime)
+                    if (arrivalTime != null) append(" — ").append(arrivalTime)
+                },
+                style = AppTheme.typography.body2,
+                color = AppTheme.colors.text.tertiary,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SectionCard(
+    label: UiText,
+    content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit,
+) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -202,18 +238,31 @@ private fun SectionCard(label: UiText, content: @Composable androidx.compose.fou
 }
 
 @Composable
-private fun InfoChip(text: String, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(AppTheme.colors.background.gray)
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-    ) {
-        Text(
-            text = text,
-            style = AppTheme.typography.body2,
-            color = AppTheme.colors.text.default,
-        )
+private fun ConditionsTable(rows: List<ConditionRow>) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        rows.forEachIndexed { index, row ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = row.label.getString(),
+                    style = AppTheme.typography.body1,
+                    color = AppTheme.colors.text.tertiary,
+                    modifier = Modifier.weight(1f),
+                )
+                Text(
+                    text = row.value.getString(),
+                    style = AppTheme.typography.body1,
+                    color = AppTheme.colors.text.default,
+                )
+            }
+            if (index < rows.lastIndex) {
+                HorizontalDivider(color = AppTheme.colors.border.divider)
+            }
+        }
     }
 }
 

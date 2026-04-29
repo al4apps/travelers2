@@ -13,19 +13,21 @@ data class CreateTripDraft(
     val duration: TripDuration? = null,
     val meetingPoint: String = "",
     val selectedVehicleId: String? = null,
-    val freeSeatsCount: Int = DEFAULT_FREE_SEATS,
+    val freeSeatsCount: Int? = null,
     val pricePerSeat: Int? = null,
-    val baggageAllowed: Boolean = false,
-    val parcelDeliveryAllowed: Boolean = false,
+    val baggageAllowed: Boolean = true,
+    val parcelDeliveryAllowed: Boolean = true,
 ) {
     val isRouteStepValid: Boolean
         get() = fromAddress != null && toAddress != null && tripDate != null
 
+    /** meetingPoint is optional. */
     val isTimeStepValid: Boolean
-        get() = departureTime != null && meetingPoint.isNotBlank()
+        get() = departureTime != null
 
     val isVehicleStepValid: Boolean
-        get() = selectedVehicleId != null && freeSeatsCount in MIN_FREE_SEATS..MAX_FREE_SEATS &&
+        get() = selectedVehicleId != null &&
+            (freeSeatsCount ?: 0) >= MIN_FREE_SEATS &&
             pricePerSeat != null && pricePerSeat > 0
 
     fun arrivalTime(): TripTime? {
@@ -37,7 +39,8 @@ data class CreateTripDraft(
 
     companion object {
         const val MIN_FREE_SEATS = 1
-        const val MAX_FREE_SEATS = 8
-        const val DEFAULT_FREE_SEATS = 1
+
+        /** Hard cap; effective max is bound by selected vehicle's totalSeats - 1 (driver). */
+        const val MAX_FREE_SEATS_HARD_CAP = 8
     }
 }

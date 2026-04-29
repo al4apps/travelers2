@@ -1,8 +1,10 @@
 package com.al4apps.travelers2.features.create_trip.vehicle.map
 
 import com.al4apps.travelers2.core.ui.UiText
+import com.al4apps.travelers2.core.ui.pluralRu
 import com.al4apps.travelers2.design_system.VehicleCarouselItemState
 import com.al4apps.travelers2.features.create_trip.model.CreateTripDraft
+import com.al4apps.travelers2.features.create_trip.model.Vehicle
 import com.al4apps.travelers2.features.create_trip.vehicle.model.CreateTripVehicleUiState
 import com.al4apps.travelers2.features.create_trip.vehicle.model.CreateTripVehicleVmState
 import com.al4apps.travelers2.shared_model.ButtonUiState
@@ -18,7 +20,6 @@ import travelers2.composeapp.generated.resources.create_trip_vehicle_price_place
 import travelers2.composeapp.generated.resources.create_trip_vehicle_price_title
 import travelers2.composeapp.generated.resources.create_trip_vehicle_seats_subtitle
 import travelers2.composeapp.generated.resources.create_trip_vehicle_seats_title
-import travelers2.composeapp.generated.resources.create_trip_vehicle_seats_unit
 import travelers2.composeapp.generated.resources.create_trip_vehicle_section
 import travelers2.composeapp.generated.resources.create_trip_vehicle_title
 import travelers2.composeapp.generated.resources.ic_arrow_back
@@ -27,8 +28,12 @@ class CreateTripVehicleUiAssembler {
 
     fun assemble(vmState: CreateTripVehicleVmState): CreateTripVehicleUiState {
         val price = vmState.priceInput.toIntOrNull()
-        val isValid = vmState.selectedVehicleId != null &&
-            vmState.freeSeatsCount in CreateTripDraft.MIN_FREE_SEATS..CreateTripDraft.MAX_FREE_SEATS &&
+        val selectedVehicle = vmState.vehicles.firstOrNull { it.id == vmState.selectedVehicleId }
+        val maxFreeSeats = selectedVehicle?.let { it.totalSeats - 1 } ?: 0
+        val seatsCount = vmState.freeSeatsCount ?: maxFreeSeats
+
+        val isValid = selectedVehicle != null &&
+            seatsCount in CreateTripDraft.MIN_FREE_SEATS..maxFreeSeats &&
             price != null && price > 0
 
         return CreateTripVehicleUiState(
@@ -45,15 +50,15 @@ class CreateTripVehicleUiAssembler {
                     id = vehicle.id,
                     model = vehicle.model,
                     plateNumber = vehicle.plateNumber,
-                    seatsLabel = "${vehicle.totalSeats} мест",
+                    seatsLabel = vehicle.seatsLabel(),
                     isSelected = vehicle.id == vmState.selectedVehicleId,
                 )
             },
             seatsTitle = UiText.Resource(Res.string.create_trip_vehicle_seats_title),
             seatsSubtitle = UiText.Resource(Res.string.create_trip_vehicle_seats_subtitle),
-            seatsValue = vmState.freeSeatsCount.toString(),
-            canDecrementSeats = vmState.freeSeatsCount > CreateTripDraft.MIN_FREE_SEATS,
-            canIncrementSeats = vmState.freeSeatsCount < CreateTripDraft.MAX_FREE_SEATS,
+            seatsValue = seatsCount.toString(),
+            canDecrementSeats = seatsCount > CreateTripDraft.MIN_FREE_SEATS,
+            canIncrementSeats = seatsCount < maxFreeSeats,
             priceTitle = UiText.Resource(Res.string.create_trip_vehicle_price_title),
             priceInput = vmState.priceInput,
             priceCurrency = UiText.Resource(Res.string.create_trip_vehicle_price_currency_short),
@@ -69,5 +74,10 @@ class CreateTripVehicleUiAssembler {
                 enabled = isValid,
             ),
         )
+    }
+
+    private fun Vehicle.seatsLabel(): String {
+        val count = totalSeats - 1
+        return "$count ${pluralRu(count, one = "место", few = "места", many = "мест")}"
     }
 }

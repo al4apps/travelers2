@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -57,23 +56,24 @@ fun CreateTripVehicleScreen(
             onBackClick = component::onBackClick,
         )
 
-        when {
-            uiState.isLoading -> Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator()
-            }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+        ) {
+            when {
+                uiState.isLoading -> Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
 
-            uiState.errorMessage != null -> Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(24.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                uiState.errorMessage != null -> Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = uiState.errorMessage.orEmpty(),
@@ -81,76 +81,80 @@ fun CreateTripVehicleScreen(
                         color = AppTheme.colors.text.tertiary,
                     )
                 }
-            }
 
-            else -> LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp),
-            ) {
-                item {
-                    Text(
-                        text = uiState.sectionTitle.getString(),
-                        style = AppTheme.typography.subtitle,
-                        color = AppTheme.colors.text.default,
-                    )
-                }
-                item {
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = 4.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        items(items = uiState.vehicles, key = { it.id }) { vehicle ->
-                            VehicleCarouselCard(
-                                state = vehicle,
-                                onClick = { component.onVehicleSelected(vehicle.id) },
-                            )
+                else -> LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                ) {
+                    item {
+                        Text(
+                            text = uiState.sectionTitle.getString(),
+                            style = AppTheme.typography.subtitle,
+                            color = AppTheme.colors.text.default,
+                        )
+                    }
+                    item {
+                        LazyRow(
+                            contentPadding = PaddingValues(horizontal = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            items(items = uiState.vehicles, key = { it.id }) { vehicle ->
+                                VehicleCarouselCard(
+                                    state = vehicle,
+                                    onClick = { component.onVehicleSelected(vehicle.id) },
+                                )
+                            }
                         }
                     }
+                    item {
+                        SeatsCard(
+                            title = uiState.seatsTitle,
+                            subtitle = uiState.seatsSubtitle,
+                            value = uiState.seatsValue,
+                            canDec = uiState.canDecrementSeats,
+                            canInc = uiState.canIncrementSeats,
+                            onDec = component::onDecrementSeats,
+                            onInc = component::onIncrementSeats,
+                        )
+                    }
+                    item {
+                        PriceCard(
+                            title = uiState.priceTitle,
+                            value = uiState.priceInput,
+                            currency = uiState.priceCurrency,
+                            hint = uiState.priceHint,
+                            placeholder = uiState.pricePlaceholder,
+                            onValueChange = component::onPriceChange,
+                        )
+                    }
+                    item {
+                        ExtrasCard(
+                            title = uiState.extrasTitle,
+                            baggageLabel = uiState.baggageLabel,
+                            parcelLabel = uiState.parcelLabel,
+                            baggageAllowed = uiState.baggageAllowed,
+                            parcelAllowed = uiState.parcelAllowed,
+                            onBaggageToggle = component::onBaggageToggle,
+                            onParcelToggle = component::onParcelToggle,
+                        )
+                    }
                 }
-                item {
-                    SeatsCard(
-                        title = uiState.seatsTitle,
-                        subtitle = uiState.seatsSubtitle,
-                        value = uiState.seatsValue,
-                        canDec = uiState.canDecrementSeats,
-                        canInc = uiState.canIncrementSeats,
-                        onDec = component::onDecrementSeats,
-                        onInc = component::onIncrementSeats,
-                    )
-                }
-                item {
-                    PriceCard(
-                        title = uiState.priceTitle,
-                        value = uiState.priceInput,
-                        currency = uiState.priceCurrency,
-                        hint = uiState.priceHint,
-                        placeholder = uiState.pricePlaceholder,
-                        onValueChange = component::onPriceChange,
-                    )
-                }
-                item {
-                    ExtrasCard(
-                        title = uiState.extrasTitle,
-                        baggageLabel = uiState.baggageLabel,
-                        parcelLabel = uiState.parcelLabel,
-                        baggageAllowed = uiState.baggageAllowed,
-                        parcelAllowed = uiState.parcelAllowed,
-                        onBaggageToggle = component::onBaggageToggle,
-                        onParcelToggle = component::onParcelToggle,
-                    )
-                }
-                item {
-                    PrimaryButton(
-                        uiState = uiState.continueButtonUiState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .widthIn(min = 160.dp),
-                        onClick = component::onContinueClick,
-                    )
-                }
-                item { bottomSpacer() }
             }
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(AppTheme.colors.background.default)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        ) {
+            PrimaryButton(
+                uiState = uiState.continueButtonUiState,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = component::onContinueClick,
+            )
+            bottomSpacer()
         }
     }
 }

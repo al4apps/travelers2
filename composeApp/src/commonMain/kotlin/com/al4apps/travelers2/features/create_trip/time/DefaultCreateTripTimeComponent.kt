@@ -18,14 +18,23 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
 
+/**
+ * Time step. Mirrors the relevant slice of the parent draft into its own [CreateTripTimeVmState].
+ *
+ * Mutations are applied locally; the slice is committed to the parent draft on every UI mutation
+ * via [onSliceChanged] so that "back-and-forward" navigation does not lose progress.
+ *
+ * The "Continue" callback ([onCommitTime]) is invoked only when the slice is fully valid.
+ */
 class DefaultCreateTripTimeComponent(
     componentContext: ComponentContext,
     initialDraft: CreateTripDraft,
-    private val onCommitTime: (
-        departureTime: TripTime,
-        duration: TripDuration,
+    private val onSliceChanged: (
+        departureTime: TripTime?,
+        duration: TripDuration?,
         meetingPoint: String,
     ) -> Unit,
+    private val onCommitTime: () -> Unit,
     private val onBack: () -> Unit,
     private val uiAssembler: CreateTripTimeUiAssembler = CreateTripTimeUiAssembler(),
 ) : CreateTripTimeComponent,
@@ -67,6 +76,7 @@ class DefaultCreateTripTimeComponent(
     }
 
     override fun onBackClick() {
+        propagateSlice()
         onBack.invoke()
     }
 
@@ -81,11 +91,11 @@ class DefaultCreateTripTimeComponent(
     }
 
     override fun onMeetingChange(value: String) {
-        vmStateStore.updateState { it.copy(meetingPoint = value) }
+        mutate { it.copy(meetingPoint = value.take(MEETING_MAX_LENGTH)) }
     }
 
     override fun onIncrementHours() {
-        vmStateStore.updateState {
+        mutate {
             val current = it.duration
             if (current.hours >= TripDuration.MAX_HOURS) it
             else it.copy(duration = current.copy(hours = current.hours + 1))
@@ -93,7 +103,7 @@ class DefaultCreateTripTimeComponent(
     }
 
     override fun onDecrementHours() {
-        vmStateStore.updateState {
+        mutate {
             val current = it.duration
             if (current.hours <= 0) it
             else it.copy(duration = current.copy(hours = current.hours - 1))
@@ -101,7 +111,7 @@ class DefaultCreateTripTimeComponent(
     }
 
     override fun onIncrementMinutes() {
-        vmStateStore.updateState {
+        mutate {
             val current = it.duration
             val next = current.minutes + MINUTES_STEP
             if (next > MINUTES_MAX) it
@@ -110,7 +120,7 @@ class DefaultCreateTripTimeComponent(
     }
 
     override fun onDecrementMinutes() {
-        vmStateStore.updateState {
+        mutate {
             val current = it.duration
             val next = current.minutes - MINUTES_STEP
             if (next < 0) it
@@ -120,9 +130,9 @@ class DefaultCreateTripTimeComponent(
 
     override fun onContinueClick() {
         val state = vmStateStore.value
-        val time = state.departureTime ?: return
-        if (state.meetingPoint.isBlank()) return
-        onCommitTime(time, state.duration, state.meetingPoint)
+        if (state.departureTime == null) return
+        propagateSlice()
+        onCommitTime()
     }
 
     private fun createDialogChild(
@@ -138,8 +148,22 @@ class DefaultCreateTripTimeComponent(
         }
 
     private fun applyDeparture(time: TripTime) {
-        vmStateStore.updateState { it.copy(departureTime = time) }
+        mutate { it.copy(departureTime = time) }
         dialogNavigation.dismiss()
+    }
+
+    private fun mutate(block: (CreateTripTimeVmState) -> CreateTripTimeVmState) {
+        vmStateStore.updateState(block)
+        propagateSlice()
+    }
+
+    private fun propagateSlice() {
+        val state = vmStateStore.value
+        onSliceChanged(
+            state.departureTime,
+            state.duration.takeUnless { it.isZero },
+            state.meetingPoint,
+        )
     }
 
     private companion object {
@@ -147,5 +171,6 @@ class DefaultCreateTripTimeComponent(
         const val DIALOG_KEY = "create_trip_time_dialog"
         const val MINUTES_STEP = 5
         const val MINUTES_MAX = 55
+        const val MEETING_MAX_LENGTH = 200
     }
 }

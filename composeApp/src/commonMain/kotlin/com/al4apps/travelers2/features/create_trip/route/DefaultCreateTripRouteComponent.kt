@@ -5,6 +5,7 @@ import com.al4apps.travelers2.core.CoroutineFeatureImpl
 import com.al4apps.travelers2.core.StateStore
 import com.al4apps.travelers2.core.model.TripAddress
 import com.al4apps.travelers2.core.model.TripDate
+import com.al4apps.travelers2.features.create_trip.domain.usecase.ObserveAuthStateUseCase
 import com.al4apps.travelers2.features.create_trip.domain.usecase.ObserveRecentTripsUseCase
 import com.al4apps.travelers2.features.create_trip.model.CreateTripDraft
 import com.al4apps.travelers2.features.create_trip.model.RecentTrip
@@ -29,12 +30,14 @@ class DefaultCreateTripRouteComponent(
     componentContext: ComponentContext,
     initialDraft: CreateTripDraft,
     observeRecentTripsUseCase: ObserveRecentTripsUseCase,
-    private val onCommitRoute: (
-        fromAddress: TripAddress,
-        toAddress: TripAddress,
-        tripDate: TripDate,
+    observeAuthStateUseCase: ObserveAuthStateUseCase,
+    /** Mirrors the route slice into the parent draft on every mutation. */
+    private val onSliceChanged: (
+        fromAddress: TripAddress?,
+        toAddress: TripAddress?,
+        tripDate: TripDate?,
     ) -> Unit,
-    private val onApplyRecentTrip: (RecentTrip) -> Unit,
+    private val onCommitRoute: () -> Unit,
     private val uiAssembler: CreateTripRouteUiAssembler = CreateTripRouteUiAssembler(),
 ) : CreateTripRouteComponent,
     ComponentContext by componentContext,
@@ -54,9 +57,14 @@ class DefaultCreateTripRouteComponent(
     )
 
     private val recentTripsValue: MutableValue<List<RecentTrip>> = MutableValue(emptyList())
+    private val isAuthenticatedValue: MutableValue<Boolean> = MutableValue(true)
 
     private val mutableUiState: MutableValue<CreateTripRouteUiState> = MutableValue(
-        uiAssembler.assemble(vmState = vmStateStore.value, recentTrips = emptyList()),
+        uiAssembler.assemble(
+            vmState = vmStateStore.value,
+            recentTrips = emptyList(),
+            isAuthenticated = true,
+        ),
     )
 
     override val uiState: Value<CreateTripRouteUiState> = mutableUiState
@@ -84,6 +92,12 @@ class DefaultCreateTripRouteComponent(
                 reassemble()
             }
             .launchIn(featureScope)
+        observeAuthStateUseCase()
+            .onEach { isAuth ->
+                isAuthenticatedValue.value = isAuth
+                reassemble()
+            }
+            .launchIn(featureScope)
     }
 
     override fun onFromClick() {
@@ -100,22 +114,20 @@ class DefaultCreateTripRouteComponent(
 
     override fun onContinueClick() {
         val state = vmStateStore.value
-        val from = state.fromAddress ?: return
-        val to = state.toAddress ?: return
-        val date = state.tripDate ?: return
-        onCommitRoute(from, to, date)
+        if (state.fromAddress == null || state.toAddress == null || state.tripDate == null) return
+        propagateSlice()
+        onCommitRoute()
     }
 
     override fun onRecentRepeatClick(recentTripId: String) {
         val trip = recentTripsValue.value.firstOrNull { it.id == recentTripId } ?: return
-        vmStateStore.updateState {
-            it.copy(
+        mutate { current ->
+            current.copy(
                 fromAddress = trip.fromAddress,
                 toAddress = trip.toAddress,
-                tripDate = it.tripDate ?: trip.tripDate,
+                tripDate = current.tripDate ?: trip.tripDate,
             )
         }
-        onApplyRecentTrip(trip)
     }
 
     private fun createChild(
@@ -151,7 +163,7 @@ class DefaultCreateTripRouteComponent(
         }
 
     private fun applyAddress(field: RouteAddressField, address: TripAddress) {
-        vmStateStore.updateState {
+        mutate {
             when (field) {
                 RouteAddressField.FROM -> it.copy(fromAddress = address)
                 RouteAddressField.TO -> it.copy(toAddress = address)
@@ -161,14 +173,25 @@ class DefaultCreateTripRouteComponent(
     }
 
     private fun applyDate(date: TripDate) {
-        vmStateStore.updateState { it.copy(tripDate = date) }
+        mutate { it.copy(tripDate = date) }
         navigation.pop()
+    }
+
+    private fun mutate(block: (CreateTripRouteVmState) -> CreateTripRouteVmState) {
+        vmStateStore.updateState(block)
+        propagateSlice()
+    }
+
+    private fun propagateSlice() {
+        val state = vmStateStore.value
+        onSliceChanged(state.fromAddress, state.toAddress, state.tripDate)
     }
 
     private fun reassemble() {
         mutableUiState.value = uiAssembler.assemble(
             vmState = vmStateStore.value,
             recentTrips = recentTripsValue.value,
+            isAuthenticated = isAuthenticatedValue.value,
         )
     }
 

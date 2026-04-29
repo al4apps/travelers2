@@ -137,6 +137,7 @@ class DefaultHomeComponent(
                         observeRecentTripsUseCase = createTripDiContainer.observeRecentTripsUseCase,
                         getUserVehiclesUseCase = createTripDiContainer.getUserVehiclesUseCase,
                         publishTripUseCase = createTripDiContainer.publishTripUseCase,
+                        observeAuthStateUseCase = createTripDiContainer.observeAuthStateUseCase,
                         updateDockVisibility = ::updateDockVisibility,
                     ),
                 )

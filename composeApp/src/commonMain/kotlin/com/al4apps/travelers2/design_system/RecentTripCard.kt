@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.al4apps.travelers2.core.ui.UiText
 import com.al4apps.travelers2.core.ui.getString
-import com.al4apps.travelers2.design_system.button.SecondaryButton
+import com.al4apps.travelers2.design_system.button.TextButton
 import com.al4apps.travelers2.theme.AppTheme
 
 data class RecentTripCardState(
@@ -89,7 +89,7 @@ fun RecentTripCard(
                     )
                 }
             }
-            SecondaryButton(
+            TextButton(
                 text = repeatLabel,
                 enabled = true,
                 onClick = onRepeatClick,

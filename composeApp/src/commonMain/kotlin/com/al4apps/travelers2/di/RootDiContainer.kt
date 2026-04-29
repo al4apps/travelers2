@@ -1,5 +1,6 @@
 package com.al4apps.travelers2.di
 
+import com.al4apps.travelers2.core.auth.InMemoryAuthRepository
 import com.al4apps.travelers2.core.database.DatabaseDriverFactory
 import com.al4apps.travelers2.core.database.SharedDatabase
 import com.al4apps.travelers2.core.platform.ContactAppLauncherFactory
@@ -34,6 +35,7 @@ class RootDiContainer(
     private val recentTripsRepository = InMemoryRecentTripsRepository()
     private val userVehiclesRepository = InMemoryUserVehiclesRepository()
     private val publishTripRepository = InMemoryPublishTripRepository()
+    private val authRepository = InMemoryAuthRepository()
 
     val getInitialRouteUseCase = GetInitialRouteUseCase(appLaunchRepository)
     val completeFirstLaunchUseCase = CompleteFirstLaunchUseCase(appLaunchRepository)
@@ -57,5 +59,6 @@ class RootDiContainer(
             recentTripsRepository = recentTripsRepository,
             userVehiclesRepository = userVehiclesRepository,
             publishTripRepository = publishTripRepository,
+            authRepository = authRepository,
         )
 }

@@ -7,12 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
@@ -46,12 +43,16 @@ fun CreateTripTimeScreen(
     val uiState by component.uiState.subscribeAsState()
     val dialogSlot by component.dialogSlot.subscribeAsState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            HomeTopBar(
-                state = uiState.topBarState,
-                onBackClick = component::onBackClick,
-            )
+    Column(modifier = Modifier.fillMaxSize()) {
+        HomeTopBar(
+            state = uiState.topBarState,
+            onBackClick = component::onBackClick,
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+        ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
@@ -109,25 +110,26 @@ fun CreateTripTimeScreen(
                         onValueChange = component::onMeetingChange,
                     )
                 }
-                item {
-                    PrimaryButton(
-                        uiState = uiState.continueButtonUiState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .widthIn(min = 160.dp),
-                        onClick = component::onContinueClick,
-                    )
-                }
-                item { bottomSpacer() }
             }
         }
-
-        when (val child = dialogSlot.child?.instance) {
-            is TimeDialogChild.TimePicker -> TimePickerDialog(
-                child = child,
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(AppTheme.colors.background.default)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        ) {
+            PrimaryButton(
+                uiState = uiState.continueButtonUiState,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = component::onContinueClick,
             )
-            null -> Unit
+            bottomSpacer()
         }
+    }
+
+    when (val child = dialogSlot.child?.instance) {
+        is TimeDialogChild.TimePicker -> TimePickerDialog(child = child)
+        null -> Unit
     }
 }
 
@@ -286,6 +288,7 @@ private fun StepperBlock(
             canIncrement = canInc,
             onDecrement = onDec,
             onIncrement = onInc,
+            valueWidth = 48.dp,
         )
     }
 }
@@ -319,7 +322,8 @@ private fun MeetingCard(
                 value = value,
                 onValueChange = onValueChange,
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
+                singleLine = false,
+                maxLines = 2,
                 placeholder = {
                     Text(
                         text = placeholder.getString(),
@@ -333,7 +337,6 @@ private fun MeetingCard(
                     unfocusedBorderColor = AppTheme.colors.border.divider,
                 ),
             )
-            Spacer(modifier = Modifier.height(2.dp))
         }
     }
 }

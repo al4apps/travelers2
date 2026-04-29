@@ -7,11 +7,14 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
-class PreviewCreateTripRouteComponent : CreateTripRouteComponent {
+class PreviewCreateTripRouteComponent(
+    isAuthenticated: Boolean = true,
+) : CreateTripRouteComponent {
     override val uiState: Value<CreateTripRouteUiState> = MutableValue(
         CreateTripRouteUiAssembler().assemble(
             vmState = CreateTripRouteVmState(),
             recentTrips = emptyList(),
+            isAuthenticated = isAuthenticated,
         ),
     )
     override val stack: Value<ChildStack<RouteSubConfig, RouteSubChild>> = MutableValue(

@@ -10,6 +10,10 @@ data class CreateTripConfirmUiState(
     val title: UiText,
     val driverName: String,
     val driverMeta: String,
+    val dateTimeLabel: UiText,
+    val dateText: String,
+    val departureTimeText: String,
+    val arrivalTimeText: String?,
     val routeLabel: UiText,
     val departure: RouteTimelinePoint,
     val arrival: RouteTimelinePoint,
@@ -17,13 +21,13 @@ data class CreateTripConfirmUiState(
     val vehicleModel: String,
     val vehiclePlate: String,
     val conditionsLabel: UiText,
-    val seatsValue: UiText,
-    val priceValue: UiText,
-    val baggageLabel: UiText,
-    val parcelLabel: UiText,
-    val baggageEnabled: Boolean,
-    val parcelEnabled: Boolean,
+    val conditions: List<ConditionRow>,
     val hint: UiText,
     val publishButtonUiState: ButtonUiState,
     val errorMessage: String?,
+)
+
+data class ConditionRow(
+    val label: UiText,
+    val value: UiText,
 )
